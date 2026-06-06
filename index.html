@@ -73,16 +73,18 @@
   /* result */
   .res{animation:slideup .5s ease both;flex:1;display:flex;flex-direction:column;width:100%;min-height:0;padding-bottom:4px}
   .res .card{padding:16px 14px}
-  .res-carousel-wrap{flex:1;display:flex;align-items:center;gap:6px;min-height:0;width:100%}
-  .page-turn{flex:0 0 54px;width:54px;height:58px;border:none;border-radius:16px;background:#fff;color:var(--ink);font-family:'Jua',sans-serif;font-size:12px;line-height:1.1;box-shadow:0 4px 0 #e4d8e2;cursor:pointer;transition:transform .08s,opacity .15s;padding:4px 2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+  .res-carousel-wrap{flex:1;display:flex;align-items:stretch;gap:6px;min-height:0;max-height:calc(100dvh - 215px);width:100%}
+  .page-turn{flex:0 0 54px;width:54px;height:58px;border:none;border-radius:16px;background:#fff;color:var(--ink);font-family:'Jua',sans-serif;font-size:12px;line-height:1.1;box-shadow:0 4px 0 #e4d8e2;cursor:pointer;transition:transform .08s,opacity .15s;padding:4px 2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;align-self:center}
   .page-turn:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 #e4d8e2}
   .page-turn:disabled{opacity:.35;cursor:default;box-shadow:0 2px 0 #eee}
   .page-turn .arr{display:block;font-size:22px;line-height:1}
-  .res-carousel{flex:1;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;min-height:0;touch-action:pan-x}
+  .res-carousel{flex:1;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;min-height:0;touch-action:pan-x pinch-zoom;align-items:stretch}
   .res-carousel::-webkit-scrollbar{display:none}
-  .res-slide{flex:0 0 100%;width:100%;scroll-snap-align:start;scroll-snap-stop:always;padding:0 1px;box-sizing:border-box}
-  .res-slide-inner{height:100%;display:flex;flex-direction:column;justify-content:center}
-  .res-slide .card{height:auto;max-height:calc(100dvh - 200px);overflow:hidden}
+  .res-slide{flex:0 0 100%;width:100%;scroll-snap-align:start;scroll-snap-stop:always;padding:0 1px;box-sizing:border-box;display:flex;min-height:0;align-self:stretch}
+  .res-slide-inner{flex:1;min-height:0;width:100%;display:flex;flex-direction:column}
+  .res-slide .card{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;touch-action:pan-y;padding-bottom:20px}
+  .res-slide .card::-webkit-scrollbar{width:5px}
+  .res-slide .card::-webkit-scrollbar-thumb{background:#eadfe8;border-radius:999px}
   .page-chip{font-family:'Jua',sans-serif;font-size:14px;color:var(--ink-soft);text-align:center;margin-bottom:8px}
   .res-dots{display:flex;justify-content:center;gap:7px;margin:10px 0 6px}
   .dot{width:9px;height:9px;border-radius:50%;background:#e4d8e2;border:none;padding:0;transition:transform .2s,background .2s}
@@ -458,7 +460,7 @@ function renderResult(previewType){
         <button type="button" class="page-turn" id="nextPage" aria-label="다음 페이지"><span class="arr">▶</span>다음</button>
       </div>
       <div class="res-nav"><div class="res-dots">${dots}</div></div>
-      <div class="swipe-hint">◀ ▶ 버튼이나 손가락으로 넘겨보세요</div>
+      <div class="swipe-hint">◀ ▶ 옆으로 넘기기 · 내용이 길면 ↕ 아래로 스크롤</div>
       <div class="res-foot res-actions">
         <button class="btn" id="retry">🔄 다시 검사하기</button>
         <div class="capture-hint">📸 마음에 드는 화면을 캡처해 보세요!</div>
