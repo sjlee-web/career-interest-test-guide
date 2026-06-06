@@ -71,10 +71,23 @@
   .nav .btn.back{flex:0 0 38%}
 
   /* result */
-  .res{animation:slideup .5s ease both}
-  .res .card{padding:18px 16px}
+  .res{animation:slideup .5s ease both;flex:1;display:flex;flex-direction:column;width:100%;min-height:0;padding-bottom:4px}
+  .res .card{padding:16px 14px}
+  .res-carousel-wrap{flex:1;display:flex;flex-direction:column;min-height:0;width:100%}
+  .res-carousel{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex:1;touch-action:pan-x}
+  .res-carousel::-webkit-scrollbar{display:none}
+  .res-slide{flex:0 0 100%;width:100%;scroll-snap-align:start;scroll-snap-stop:always;padding:0 1px;box-sizing:border-box}
+  .res-slide-inner{height:100%;display:flex;flex-direction:column;justify-content:center}
+  .res-slide .card{height:auto;max-height:calc(100dvh - 168px);overflow:hidden}
+  .page-chip{font-family:'Jua',sans-serif;font-size:14px;color:var(--ink-soft);text-align:center;margin-bottom:8px}
+  .res-dots{display:flex;justify-content:center;gap:7px;margin:10px 0 6px}
+  .dot{width:9px;height:9px;border-radius:50%;background:#e4d8e2;border:none;padding:0;transition:transform .2s,background .2s}
+  .dot.on{background:var(--brand);transform:scale(1.15)}
+  .swipe-hint{text-align:center;font-weight:700;font-size:14px;color:var(--ink-soft);margin-bottom:8px}
+  .res-foot{margin-top:auto;padding-top:4px}
   .tiny{font-family:'Jua',sans-serif;font-size:15px;color:var(--ink-soft);text-align:center;margin-bottom:6px}
-  .radar-center{max-width:276px;margin:6px auto 2px}
+  .radar-center{max-width:240px;margin:4px auto 0}
+  .res-slide--main .radar-center{max-width:220px}
   .radar-svg{display:block;width:100%}
   .type-line{display:flex;align-items:center;justify-content:center;gap:9px;margin-top:10px}
   .mini-masc{width:44px;flex-shrink:0;line-height:0}
@@ -95,8 +108,8 @@
   .job{font-family:'Gaegu',sans-serif;font-weight:700;font-size:17px;color:#fff;padding:8px 14px;border-radius:999px;box-shadow:0 4px 10px rgba(0,0,0,.1);animation:jobin .4s ease both}
   @keyframes jobin{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
 
-  .guide{margin-top:13px}
-  .guide .st{font-family:'Jua',sans-serif;font-size:17px;display:block;margin:0 0 10px}
+  .guide{margin-top:0}
+  .guide .st{font-family:'Jua',sans-serif;font-size:16px;display:block;margin:0 0 8px}
   .kw-row{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:11px}
   .kw{font-family:'Gaegu',sans-serif;font-weight:700;font-size:16px;padding:7px 13px;border-radius:999px;background:#FBF7FB;border:2px solid #efe6ee}
   .env-box{background:linear-gradient(135deg,#FFF8FC,#F8F4FF);border-radius:16px;padding:13px 14px;border:2px dashed #eadfe8}
@@ -107,7 +120,8 @@
   .job-card .jh{display:flex;align-items:center;gap:8px;margin-bottom:6px}
   .job-card .ji{font-size:22px;line-height:1}
   .job-card .jn{font-family:'Jua',sans-serif;font-size:18px}
-  .job-card .jd{font-weight:700;font-size:16px;line-height:1.45;color:var(--ink-soft);margin:0}
+  .job-card .jd{font-weight:700;font-size:15px;line-height:1.4;color:var(--ink-soft);margin:0}
+  .job-card{padding:11px 12px}
   .fit-list{display:flex;flex-direction:column;gap:10px}
   .fit-item{border-radius:16px;padding:13px 14px;background:#fff;border:2.5px solid #efe6ee}
   .fit-top{display:flex;align-items:center;gap:8px;margin-bottom:7px}
@@ -117,8 +131,8 @@
   .act{font-family:'Gaegu',sans-serif;font-weight:700;font-size:15px;padding:6px 11px;border-radius:999px;background:#FFF8E8;border:2px solid #FFE8A8}
   .preview-chip{display:inline-block;margin-top:8px;background:#E8F4FF;color:#2B6CB0;font-weight:700;font-size:14px;padding:6px 12px;border-radius:999px}
 
-  .res-actions{margin-top:15px}
-  .capture-hint{text-align:center;font-weight:700;font-size:15px;color:var(--ink-soft);margin-top:9px}
+  .res-actions{margin-top:0}
+  .capture-hint{text-align:center;font-weight:700;font-size:14px;color:var(--ink-soft);margin-top:7px}
 
   .confetti{position:fixed;top:-20px;width:11px;height:11px;z-index:50;opacity:.9;animation:fall linear forwards}
   @keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:.2}}
@@ -336,8 +350,10 @@ function buildRadar(scores,hex){
   return `<svg class="radar-svg" viewBox="0 0 300 300">${bg}<polygon points="${poly}" fill="${tint(hex,0.32)}" stroke="${hex}" stroke-width="3.2"/>${dots}${labels}</svg>`;
 }
 
-function buildGuide(P,hex){
-  const g=CAREER_EXTRA[P]; if(!g) return '';
+const SLIDE_LABELS=['나의 유형','강점·환경','직업 알아보기','활동·직업'];
+
+function buildResultSlides(P,T,S,radar,jobs){
+  const g=CAREER_EXTRA[P];
   const kws=g.keywords.map(k=>`<span class="kw">${k}</span>`).join('');
   const cards=g.jobDetails.map((j,i)=>`
     <div class="job-card" style="animation-delay:${0.1+i*0.08}s">
@@ -353,23 +369,60 @@ function buildGuide(P,hex){
       <div class="act-row">${acts}</div>
     </div>`;
   }).join('');
-  return `
-    <div class="card guide">
-      <span class="st">✨ 나의 강점 키워드</span>
-      <div class="kw-row">${kws}</div>
-      <div class="env-box">
-        <div class="el">🌱 잘 맞는 환경</div>
-        <p>${g.env}</p>
+  return [
+    `<div class="res-slide res-slide--main"><div class="res-slide-inner">
+      <div class="card">
+        <div class="tiny">나의 직업 흥미 유형은?</div>
+        <div class="radar-center">${radar}</div>
+        <div class="type-line">
+          <span class="mini-masc">${mascot(P)}</span>
+          <span class="type-name" style="color:${T.hex}">${T.name} (${T.code})</span>
+        </div>
+        <div class="charname" style="color:${T.hex}">${T.charName}</div>
+        <div class="badge-row" style="margin-top:10px"><span class="bdg gold">🥇 ${T.name}</span><span class="bdg silver">🥈 ${S.name}</span></div>
+        <p style="font-weight:700;font-size:16px;line-height:1.45;text-align:center;margin:9px 0 0">너의 강점은 <b style="color:${T.hex}">${T.name}</b>! ${T.desc}</p>
       </div>
-    </div>
-    <div class="card guide">
-      <span class="st">💼 직업 한눈에 보기</span>
-      <div class="job-cards">${cards}</div>
-    </div>
-    <div class="card guide">
-      <span class="st">🤝 잘 맞는 유형 + 추천 활동</span>
-      <div class="fit-list">${fits}</div>
-    </div>`;
+    </div></div>`,
+    `<div class="res-slide"><div class="res-slide-inner">
+      <div class="card guide">
+        <span class="st">✨ 나의 강점 키워드</span>
+        <div class="kw-row">${kws}</div>
+        <div class="env-box">
+          <div class="el">🌱 잘 맞는 환경</div>
+          <p>${g.env}</p>
+        </div>
+      </div>
+    </div></div>`,
+    `<div class="res-slide"><div class="res-slide-inner">
+      <div class="card guide">
+        <span class="st">💼 직업 한눈에 보기</span>
+        <div class="job-cards">${cards}</div>
+      </div>
+    </div></div>`,
+    `<div class="res-slide"><div class="res-slide-inner">
+      <div class="card guide">
+        <span class="st">🤝 잘 맞는 유형 + 추천 활동</span>
+        <div class="fit-list">${fits}</div>
+        <span class="jt" style="margin-top:12px">💼 이런 직업 어때?</span>
+        <div class="jobs">${jobs}</div>
+      </div>
+    </div></div>`
+  ];
+}
+
+function initResultCarousel(){
+  const carousel=document.getElementById('resCarousel');
+  const chip=document.getElementById('pageChip');
+  const dots=[...document.querySelectorAll('.res-dots .dot')];
+  if(!carousel) return;
+  const sync=()=>{
+    const i=Math.round(carousel.scrollLeft/carousel.offsetWidth);
+    dots.forEach((d,n)=>d.classList.toggle('on',n===i));
+    if(chip) chip.textContent=`${i+1} / ${dots.length} · ${SLIDE_LABELS[i]}`;
+  };
+  carousel.addEventListener('scroll',sync,{passive:true});
+  dots.forEach((d,n)=>d.onclick=()=>carousel.scrollTo({left:n*carousel.offsetWidth,behavior:'smooth'}));
+  sync();
 }
 
 function renderResult(previewType){
@@ -380,33 +433,24 @@ function renderResult(previewType){
   const T=TYPES[P], S=TYPES[Sub];
   const radar=buildRadar(scores,T.hex);
   const jobs=T.jobs.map((j,i)=>`<span class="job" style="background:${T.hex};animation-delay:${0.15+i*0.07}s">${j}</span>`).join('');
-  const guide=buildGuide(P,T.hex);
+  const slides=buildResultSlides(P,T,S,radar,jobs).join('');
+  const dots=SLIDE_LABELS.map((_,i)=>`<button type="button" class="dot${i?'':' on'}" aria-label="${i+1}번째 결과"></button>`).join('');
   const previewNote=previewType?'<span class="preview-chip">👀 진로시간 예시 미리보기</span>':'';
   app.innerHTML=topbar()+`
     <div class="res">
-      <div class="card">
-        <div class="tiny">나의 직업 흥미 유형은?${previewNote}</div>
-        <div class="radar-center">${radar}</div>
-        <div class="type-line">
-          <span class="mini-masc">${mascot(P)}</span>
-          <span class="type-name" style="color:${T.hex}">${T.name} (${T.code})</span>
-        </div>
-        <div class="charname" style="color:${T.hex}">${T.charName}</div>
+      <div class="page-chip" id="pageChip">1 / 4 · ${SLIDE_LABELS[0]}</div>
+      ${previewNote?`<div style="text-align:center;margin-bottom:6px">${previewNote}</div>`:''}
+      <div class="res-carousel-wrap">
+        <div class="res-carousel" id="resCarousel">${slides}</div>
       </div>
-      <div class="card interp">
-        <div class="badge-row"><span class="bdg gold">🥇 ${T.name}</span><span class="bdg silver">🥈 ${S.name}</span></div>
-        <p>너의 강점은 <b style="color:${T.hex}">${T.name}</b>! ${T.desc}<br>거기에 <b style="color:${S.hex}">${S.name}</b>의 ${S.support}도 살짝 더해졌어 ✨</p>
-      </div>
-      ${guide}
-      <div class="card jobs-wrap">
-        <span class="jt">💼 이런 직업 어때?</span>
-        <div class="jobs">${jobs}</div>
-      </div>
-      <div class="res-actions">
+      <div class="res-dots">${dots}</div>
+      <div class="swipe-hint">👈👉 옆으로 넘겨서 더 보기</div>
+      <div class="res-foot res-actions">
         <button class="btn" id="retry">🔄 다시 검사하기</button>
-        <div class="capture-hint">📸 결과를 캡처해서 친구·선생님과 나눠봐!</div>
+        <div class="capture-hint">📸 마음에 드는 화면을 캡처해 보세요!</div>
       </div>
     </div>`;
+  initResultCarousel();
   launchConfetti();
   document.getElementById('retry').onclick=()=>{
     answers=new Array(QUESTIONS.length).fill(null); answersIdx=new Array(QUESTIONS.length).fill(null); qIndex=0; renderIntro();
