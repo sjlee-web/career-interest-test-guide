@@ -73,17 +73,22 @@
   /* result */
   .res{animation:slideup .5s ease both;flex:1;display:flex;flex-direction:column;width:100%;min-height:0;padding-bottom:4px}
   .res .card{padding:16px 14px}
-  .res-carousel-wrap{flex:1;display:flex;flex-direction:column;min-height:0;width:100%}
-  .res-carousel{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex:1;touch-action:pan-x}
+  .res-carousel-wrap{flex:1;display:flex;align-items:center;gap:6px;min-height:0;width:100%}
+  .page-turn{flex:0 0 54px;width:54px;height:58px;border:none;border-radius:16px;background:#fff;color:var(--ink);font-family:'Jua',sans-serif;font-size:12px;line-height:1.1;box-shadow:0 4px 0 #e4d8e2;cursor:pointer;transition:transform .08s,opacity .15s;padding:4px 2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+  .page-turn:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 #e4d8e2}
+  .page-turn:disabled{opacity:.35;cursor:default;box-shadow:0 2px 0 #eee}
+  .page-turn .arr{display:block;font-size:22px;line-height:1}
+  .res-carousel{flex:1;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;min-height:0;touch-action:pan-x}
   .res-carousel::-webkit-scrollbar{display:none}
   .res-slide{flex:0 0 100%;width:100%;scroll-snap-align:start;scroll-snap-stop:always;padding:0 1px;box-sizing:border-box}
   .res-slide-inner{height:100%;display:flex;flex-direction:column;justify-content:center}
-  .res-slide .card{height:auto;max-height:calc(100dvh - 168px);overflow:hidden}
+  .res-slide .card{height:auto;max-height:calc(100dvh - 200px);overflow:hidden}
   .page-chip{font-family:'Jua',sans-serif;font-size:14px;color:var(--ink-soft);text-align:center;margin-bottom:8px}
   .res-dots{display:flex;justify-content:center;gap:7px;margin:10px 0 6px}
   .dot{width:9px;height:9px;border-radius:50%;background:#e4d8e2;border:none;padding:0;transition:transform .2s,background .2s}
   .dot.on{background:var(--brand);transform:scale(1.15)}
-  .swipe-hint{text-align:center;font-weight:700;font-size:14px;color:var(--ink-soft);margin-bottom:8px}
+  .res-nav{display:flex;align-items:center;justify-content:center;gap:12px;margin:10px 0 4px}
+  .swipe-hint{text-align:center;font-weight:700;font-size:14px;color:var(--ink-soft);margin-bottom:6px}
   .res-foot{margin-top:auto;padding-top:4px}
   .tiny{font-family:'Jua',sans-serif;font-size:15px;color:var(--ink-soft);text-align:center;margin-bottom:6px}
   .radar-center{max-width:240px;margin:4px auto 0}
@@ -350,7 +355,7 @@ function buildRadar(scores,hex){
   return `<svg class="radar-svg" viewBox="0 0 300 300">${bg}<polygon points="${poly}" fill="${tint(hex,0.32)}" stroke="${hex}" stroke-width="3.2"/>${dots}${labels}</svg>`;
 }
 
-const SLIDE_LABELS=['나의 유형','강점·환경','직업 알아보기','활동·직업'];
+const SLIDE_LABELS=['나의 유형','강점·직업','활동·추천'];
 
 function buildResultSlides(P,T,S,radar,jobs){
   const g=CAREER_EXTRA[P];
@@ -391,11 +396,7 @@ function buildResultSlides(P,T,S,radar,jobs){
           <div class="el">🌱 잘 맞는 환경</div>
           <p>${g.env}</p>
         </div>
-      </div>
-    </div></div>`,
-    `<div class="res-slide"><div class="res-slide-inner">
-      <div class="card guide">
-        <span class="st">💼 직업 한눈에 보기</span>
+        <span class="st" style="margin-top:12px">💼 직업 한눈에 보기</span>
         <div class="job-cards">${cards}</div>
       </div>
     </div></div>`,
@@ -413,15 +414,26 @@ function buildResultSlides(P,T,S,radar,jobs){
 function initResultCarousel(){
   const carousel=document.getElementById('resCarousel');
   const chip=document.getElementById('pageChip');
+  const prev=document.getElementById('prevPage');
+  const next=document.getElementById('nextPage');
   const dots=[...document.querySelectorAll('.res-dots .dot')];
   if(!carousel) return;
+  const total=dots.length;
+  const go=(n)=>{
+    const i=Math.max(0,Math.min(total-1,n));
+    carousel.scrollTo({left:i*carousel.offsetWidth,behavior:'smooth'});
+  };
   const sync=()=>{
     const i=Math.round(carousel.scrollLeft/carousel.offsetWidth);
     dots.forEach((d,n)=>d.classList.toggle('on',n===i));
-    if(chip) chip.textContent=`${i+1} / ${dots.length} · ${SLIDE_LABELS[i]}`;
+    if(chip) chip.textContent=`${i+1} / ${total} · ${SLIDE_LABELS[i]}`;
+    if(prev) prev.disabled=i<=0;
+    if(next) next.disabled=i>=total-1;
   };
   carousel.addEventListener('scroll',sync,{passive:true});
-  dots.forEach((d,n)=>d.onclick=()=>carousel.scrollTo({left:n*carousel.offsetWidth,behavior:'smooth'}));
+  dots.forEach((d,n)=>d.onclick=()=>go(n));
+  if(prev) prev.onclick=()=>go(Math.round(carousel.scrollLeft/carousel.offsetWidth)-1);
+  if(next) next.onclick=()=>go(Math.round(carousel.scrollLeft/carousel.offsetWidth)+1);
   sync();
 }
 
@@ -438,13 +450,15 @@ function renderResult(previewType){
   const previewNote=previewType?'<span class="preview-chip">👀 진로시간 예시 미리보기</span>':'';
   app.innerHTML=topbar()+`
     <div class="res">
-      <div class="page-chip" id="pageChip">1 / 4 · ${SLIDE_LABELS[0]}</div>
+      <div class="page-chip" id="pageChip">1 / 3 · ${SLIDE_LABELS[0]}</div>
       ${previewNote?`<div style="text-align:center;margin-bottom:6px">${previewNote}</div>`:''}
       <div class="res-carousel-wrap">
+        <button type="button" class="page-turn" id="prevPage" disabled aria-label="이전 페이지"><span class="arr">◀</span>이전</button>
         <div class="res-carousel" id="resCarousel">${slides}</div>
+        <button type="button" class="page-turn" id="nextPage" aria-label="다음 페이지"><span class="arr">▶</span>다음</button>
       </div>
-      <div class="res-dots">${dots}</div>
-      <div class="swipe-hint">👈👉 옆으로 넘겨서 더 보기</div>
+      <div class="res-nav"><div class="res-dots">${dots}</div></div>
+      <div class="swipe-hint">◀ ▶ 버튼이나 손가락으로 넘겨보세요</div>
       <div class="res-foot res-actions">
         <button class="btn" id="retry">🔄 다시 검사하기</button>
         <div class="capture-hint">📸 마음에 드는 화면을 캡처해 보세요!</div>
