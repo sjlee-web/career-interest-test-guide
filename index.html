@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>직업 흥미 대모험 🎪</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{--brand:#FF5C8A;--brand2:#FF9A3D;--brand-dark:#E03E6E;--ink:#3a2e3a;--ink-soft:#7a6b78}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{font-family:'Gaegu',sans-serif;color:var(--ink);background:linear-gradient(165deg,#FFF1F6,#F3F0FF 48%,#E7FBF3);
+    overflow-x:hidden;display:flex;flex-direction:column;align-items:center;min-height:100%}
+  .blob{position:fixed;border-radius:50%;filter:blur(38px);opacity:.5;z-index:0;animation:float 9s ease-in-out infinite}
+  .b1{width:200px;height:200px;background:#FFD6E8;top:-40px;left:-50px}
+  .b2{width:170px;height:170px;background:#D8E8FF;bottom:5%;right:-50px;animation-delay:-3s}
+  .b3{width:150px;height:150px;background:#D9F7E6;top:40%;left:-60px;animation-delay:-5s}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-22px)}}
+  #app{position:relative;z-index:1;width:100%;max-width:480px;padding:16px 18px 24px;display:flex;flex-direction:column;flex:1}
+  h1,.jua,.btn{font-family:'Jua',sans-serif;font-weight:400}
+
+  .topbar{display:flex;justify-content:center;margin-bottom:12px}
+  .pill{font-family:'Jua',sans-serif;font-size:15px;color:#fff;background:var(--ink);padding:8px 20px;border-radius:999px;box-shadow:0 4px 0 #271f27}
+  .card{background:#fff;border-radius:26px;padding:20px 18px;box-shadow:0 12px 30px rgba(120,80,110,.12)}
+
+  /* intro */
+  .intro{text-align:center;display:flex;flex-direction:column;align-items:center;gap:13px;padding:30px 22px 26px}
+  .intro .emoji{font-size:68px;line-height:1;animation:pop .6s cubic-bezier(.2,1.4,.5,1) both,bob 2.6s ease-in-out .6s infinite}
+  .intro h1{font-size:31px;line-height:1.2}
+  .intro .sub{font-size:19px;color:var(--ink-soft);font-weight:700;line-height:1.5}
+  .hint-chip{display:inline-block;background:#FFF0F5;color:var(--brand-dark);font-weight:700;font-size:16px;padding:9px 16px;border-radius:999px;border:2px dashed #FFC2D6}
+  @keyframes pop{0%{transform:scale(.3);opacity:0}100%{transform:scale(1);opacity:1}}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-9px) rotate(3deg)}}
+
+  .btn{border:none;cursor:pointer;width:100%;font-size:21px;color:#fff;padding:15px;border-radius:18px;
+    background:linear-gradient(180deg,var(--brand),var(--brand2));box-shadow:0 6px 0 var(--brand-dark);transition:transform .08s,box-shadow .08s}
+  .btn:active{transform:translateY(5px);box-shadow:0 1px 0 var(--brand-dark)}
+  .btn.ghost{background:#fff;color:var(--ink-soft);box-shadow:0 5px 0 #e4d8e2}
+  .btn.ghost:active{box-shadow:0 1px 0 #e4d8e2}
+  .btn.pulse{animation:pulse 1.1s ease-in-out infinite}
+  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+
+  /* progress */
+  .progress-wrap{margin-bottom:13px}
+  .progress-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+  .progress-top .label{font-family:'Jua',sans-serif;font-size:16px;color:var(--ink-soft)}
+  .progress-top .count{font-family:'Jua',sans-serif;font-size:17px;color:var(--brand-dark)}
+  .track{height:13px;background:#fff;border-radius:999px;overflow:hidden;box-shadow:inset 0 2px 4px rgba(0,0,0,.06)}
+  .fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--brand),var(--brand2));transition:width .45s cubic-bezier(.4,1.2,.5,1)}
+
+  /* question */
+  .q-card{animation:slideup .4s ease both}
+  @keyframes slideup{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+  .scene{width:72px;height:72px;border-radius:50%;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:40px;
+    background:radial-gradient(circle at 50% 40%,#FFF4DA,#FFE7C2);box-shadow:0 6px 14px rgba(255,170,90,.25);animation:pop .45s cubic-bezier(.2,1.4,.5,1) both}
+  .q-text{font-family:'Jua',sans-serif;font-size:21px;text-align:center;line-height:1.35;margin-bottom:16px}
+  .options{display:flex;flex-direction:column;gap:10px}
+  .opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;cursor:pointer;
+    background:#FBF7FB;border:2.5px solid #efe6ee;border-radius:16px;padding:13px 14px;
+    font-family:'Gaegu',sans-serif;font-weight:700;font-size:18px;color:var(--ink);transition:transform .12s,border-color .12s,background .12s}
+  .opt:active{transform:scale(.98)}
+  .opt .oe{font-size:24px;flex-shrink:0}
+  .opt .ot{flex:1;line-height:1.3}
+  .opt .check{margin-left:auto;font-size:21px;opacity:0;transform:scale(.4);transition:.2s}
+  .opt.sel{background:#FFF0F6;border-color:var(--brand);box-shadow:0 6px 14px rgba(255,92,138,.18)}
+  .opt.sel .check{opacity:1;transform:scale(1)}
+  .nav{display:flex;gap:10px;margin-top:14px}
+  .nav .btn{font-size:18px;padding:13px}
+  .nav .btn.back{flex:0 0 38%}
+
+  /* result */
+  .res{animation:slideup .5s ease both}
+  .res .card{padding:18px 16px}
+  .tiny{font-family:'Jua',sans-serif;font-size:15px;color:var(--ink-soft);text-align:center;margin-bottom:6px}
+  .radar-center{max-width:276px;margin:6px auto 2px}
+  .radar-svg{display:block;width:100%}
+  .type-line{display:flex;align-items:center;justify-content:center;gap:9px;margin-top:10px}
+  .mini-masc{width:44px;flex-shrink:0;line-height:0}
+  .mini-masc svg{width:44px;height:auto;display:block;animation:none}
+  .type-name{font-family:'Jua',sans-serif;font-size:29px;line-height:1.1}
+  .charname{font-family:'Jua',sans-serif;font-size:19px;text-align:center;margin-top:2px}
+
+  .interp{margin-top:11px;padding:15px 16px}
+  .badge-row{display:flex;gap:7px;justify-content:center;margin-bottom:9px}
+  .bdg{font-family:'Jua',sans-serif;font-size:15px;padding:6px 14px;border-radius:999px}
+  .bdg.gold{background:#FFF1C9;color:#946400}
+  .bdg.silver{background:#ECEFF3;color:#5B6470}
+  .interp p{font-weight:700;font-size:17px;line-height:1.5;text-align:center;margin:0}
+
+  .jobs-wrap{margin-top:13px}
+  .jt{font-family:'Jua',sans-serif;font-size:17px;display:block;margin:0 4px 9px}
+  .jobs{display:flex;flex-wrap:wrap;gap:8px}
+  .job{font-family:'Gaegu',sans-serif;font-weight:700;font-size:17px;color:#fff;padding:8px 14px;border-radius:999px;box-shadow:0 4px 10px rgba(0,0,0,.1);animation:jobin .4s ease both}
+  @keyframes jobin{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
+
+  .guide{margin-top:13px}
+  .guide .st{font-family:'Jua',sans-serif;font-size:17px;display:block;margin:0 0 10px}
+  .kw-row{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:11px}
+  .kw{font-family:'Gaegu',sans-serif;font-weight:700;font-size:16px;padding:7px 13px;border-radius:999px;background:#FBF7FB;border:2px solid #efe6ee}
+  .env-box{background:linear-gradient(135deg,#FFF8FC,#F8F4FF);border-radius:16px;padding:13px 14px;border:2px dashed #eadfe8}
+  .env-box .el{font-family:'Jua',sans-serif;font-size:15px;color:var(--ink-soft);margin-bottom:5px}
+  .env-box p{font-weight:700;font-size:16px;line-height:1.45;margin:0}
+  .job-cards{display:flex;flex-direction:column;gap:9px}
+  .job-card{border-radius:16px;padding:13px 14px;background:#FBF7FB;border:2px solid #efe6ee;animation:jobin .4s ease both}
+  .job-card .jh{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+  .job-card .ji{font-size:22px;line-height:1}
+  .job-card .jn{font-family:'Jua',sans-serif;font-size:18px}
+  .job-card .jd{font-weight:700;font-size:16px;line-height:1.45;color:var(--ink-soft);margin:0}
+  .fit-list{display:flex;flex-direction:column;gap:10px}
+  .fit-item{border-radius:16px;padding:13px 14px;background:#fff;border:2.5px solid #efe6ee}
+  .fit-top{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+  .fit-badge{font-family:'Jua',sans-serif;font-size:15px;padding:5px 12px;border-radius:999px;color:#fff}
+  .fit-why{font-weight:700;font-size:16px;line-height:1.4;margin:0 0 8px}
+  .act-row{display:flex;flex-wrap:wrap;gap:6px}
+  .act{font-family:'Gaegu',sans-serif;font-weight:700;font-size:15px;padding:6px 11px;border-radius:999px;background:#FFF8E8;border:2px solid #FFE8A8}
+  .preview-chip{display:inline-block;margin-top:8px;background:#E8F4FF;color:#2B6CB0;font-weight:700;font-size:14px;padding:6px 12px;border-radius:999px}
+
+  .res-actions{margin-top:15px}
+  .capture-hint{text-align:center;font-weight:700;font-size:15px;color:var(--ink-soft);margin-top:9px}
+
+  .confetti{position:fixed;top:-20px;width:11px;height:11px;z-index:50;opacity:.9;animation:fall linear forwards}
+  @keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:.2}}
+</style>
+</head>
+<body>
+  <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+  <div id="app"></div>
+
+<script>
+const MASCOT = {
+  R:{light:'#FFD7D7',body:'#FF9E9E',shade:'#EE7C7C',
+     front:`<path d="M33 44 A27 25 0 0 1 87 44 Z" fill="#FFC83D"/><rect x="29" y="41" width="62" height="7.5" rx="3.7" fill="#F2B100"/><rect x="56" y="24" width="8" height="9" rx="4" fill="#F2B100"/><g transform="translate(90 90) rotate(35)"><rect x="-2.5" y="0" width="5" height="16" rx="2.5" fill="#AEB6C2"/><circle cx="0" cy="-2" r="6.5" fill="none" stroke="#AEB6C2" stroke-width="4"/></g>`},
+  I:{light:'#FBCFE0',body:'#F49BBC',shade:'#E87BA1',
+     front:`<circle cx="48" cy="62" r="11.5" fill="none" stroke="#5b4a58" stroke-width="2.6"/><circle cx="72" cy="62" r="11.5" fill="none" stroke="#5b4a58" stroke-width="2.6"/><path d="M59 60 q1 -2.5 2 0" stroke="#5b4a58" stroke-width="2.6" fill="none"/><g transform="translate(93 42) rotate(18)"><circle cx="0" cy="0" r="9.5" fill="#D8ECFF" stroke="#5b4a58" stroke-width="3"/><rect x="-2.6" y="8" width="5.2" height="15" rx="2.6" fill="#5b4a58"/></g>`},
+  A:{light:'#DED3FB',body:'#BBA6F7',shade:'#9E83EF',
+     front:`<g transform="translate(60 33) rotate(-13)"><ellipse cx="0" cy="2" rx="23" ry="10" fill="#7E5FD6"/><ellipse cx="0" cy="-1" rx="23" ry="9" fill="#9B7DEE"/><circle cx="0" cy="-8" r="3.6" fill="#7E5FD6"/></g><g transform="translate(90 86) rotate(42)"><rect x="-2.6" y="-4" width="5.2" height="18" rx="2.6" fill="#C98A52"/><path d="M-4 12 h8 l-1.5 9 h-5 z" fill="#9775FA"/></g>`},
+  S:{light:'#CFE7FB',body:'#9CCDF7',shade:'#74B4EF',
+     front:`<g transform="translate(60 92)"><path d="M0 8 C -8 1 -8 -7 -3.6 -7 C -1.2 -7 0 -4.8 0 -2.8 C 0 -4.8 1.2 -7 3.6 -7 C 8 -7 8 1 0 8 Z" fill="#FF6B8A"/><ellipse cx="-2.4" cy="-2.4" rx="1.7" ry="2.5" fill="#fff" opacity=".7"/></g><g transform="translate(92 40)" fill="#FFD93D"><path d="M0 -7 L1.6 -1.6 L7 0 L1.6 1.6 L0 7 L-1.6 1.6 L-7 0 L-1.6 -1.6 Z"/></g>`},
+  E:{light:'#C9F1D2',body:'#97E0A6',shade:'#6FD083',
+     behind:`<path d="M30 60 Q60 54 90 60 L100 114 Q60 104 20 114 Z" fill="#FF6B6B"/>`,
+     front:`<g transform="translate(92 38)"><path d="M0 -11 L3.2 -3.4 L11 -3 L4.8 2 L6.8 10 L0 5 L-6.8 10 L-4.8 2 L-11 -3 L-3.2 -3.4 Z" fill="#FFD93D" stroke="#F2B100" stroke-width="1"/></g>`},
+  C:{light:'#FDECB2',body:'#FAD471',shade:'#F2C040',
+     front:`<g transform="translate(60 91) rotate(-6)"><rect x="-17" y="-15" width="34" height="32" rx="4.5" fill="#FFFDF6" stroke="#E0A93A" stroke-width="2.6"/><rect x="-8" y="-19" width="16" height="7.5" rx="3.5" fill="#C98A2E"/><line x1="-9" y1="-4" x2="8" y2="-4" stroke="#E9CE86" stroke-width="2.6" stroke-linecap="round"/><line x1="-9" y1="3" x2="2" y2="3" stroke="#E9CE86" stroke-width="2.6" stroke-linecap="round"/><path d="M-11 9 l3.5 3.5 l6 -7" stroke="#51CF66" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>`},
+};
+function mascot(t){
+  const m=MASCOT[t]; const g='mg_'+t;
+  return `<svg viewBox="0 0 120 124" class="masc" xmlns="http://www.w3.org/2000/svg">
+    <defs><radialGradient id="${g}" cx="50%" cy="32%" r="72%"><stop offset="0%" stop-color="${m.light}"/><stop offset="100%" stop-color="${m.body}"/></radialGradient></defs>
+    <ellipse cx="46" cy="112" rx="10" ry="6.5" fill="${m.shade}"/><ellipse cx="74" cy="112" rx="10" ry="6.5" fill="${m.shade}"/>
+    ${m.behind||''}
+    <ellipse cx="60" cy="66" rx="42" ry="44" fill="url(#${g})"/>
+    <ellipse cx="39" cy="76" rx="7.5" ry="5" fill="#FF8FB0" opacity=".5"/><ellipse cx="81" cy="76" rx="7.5" ry="5" fill="#FF8FB0" opacity=".5"/>
+    <ellipse cx="48" cy="62" rx="9" ry="9.5" fill="#fff"/><ellipse cx="72" cy="62" rx="9" ry="9.5" fill="#fff"/>
+    <circle cx="49" cy="63" r="4.8" fill="#4a3b48"/><circle cx="71" cy="63" r="4.8" fill="#4a3b48"/>
+    <circle cx="47.2" cy="61" r="1.8" fill="#fff"/><circle cx="69.2" cy="61" r="1.8" fill="#fff"/>
+    <path d="M53 76 q7 6 14 0" stroke="#4a3b48" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+    ${m.front||''}
+  </svg>`;
+}
+
+const TYPES = {
+  R:{name:'현실형',code:'R',hex:'#FF6B6B',charName:'뚝딱 메이커',desc:'손으로 만들고 고치는 게 제일 재밌어!',support:'직접 해결하는 손맛',jobs:['엔지니어','운동선수','요리사','파일럿','로봇 개발자']},
+  I:{name:'탐구형',code:'I',hex:'#F06595',charName:'호기심 탐정',desc:'궁금한 건 끝까지 파헤쳐!',support:'파고드는 똑똑함',jobs:['과학자','의사','데이터 분석가','게임 기획자','수의사']},
+  A:{name:'예술형',code:'A',hex:'#9775FA',charName:'감성 아티스트',desc:'나만의 감각으로 표현하는 게 좋아!',support:'남다른 표현력',jobs:['디자이너','웹툰 작가','유튜버','영상 편집자','가수']},
+  S:{name:'사회형',code:'S',hex:'#4DABF7',charName:'모두의 단짝',desc:'사람들과 어울리고 돕는 게 행복해!',support:'따뜻한 마음',jobs:['선생님','상담사','간호사','사회복지사','승무원']},
+  E:{name:'진취형',code:'E',hex:'#51CF66',charName:'열정 리더',desc:'목표를 세우고 사람들을 이끄는 게 신나!',support:'앞장서는 추진력',jobs:['창업가','마케터','변호사','기획자','크리에이터']},
+  C:{name:'관습형',code:'C',hex:'#E8A800',charName:'완벽 플래너',desc:'꼼꼼하게 관리하고 정리하는 게 뿌듯해!',support:'야무진 정리력',jobs:['회계사','공무원','데이터 관리자','은행원','MD']},
+};
+const ORDER = ['R','I','A','S','E','C'];
+
+const CAREER_EXTRA = {
+  R:{keywords:['손재주','실용적','현장감','문제해결'],env:'직접 만들고, 움직이며, 눈에 보이는 결과가 나오는 환경',
+    jobDetails:[
+      {e:'🔧',n:'엔지니어',d:'기계·구조물을 설계하고 직접 만들어 세상에 실제로 적용하는 일이에요.'},
+      {e:'🍳',n:'요리사',d:'재료를 손으로 다루며 맛과 모양을 완성해 사람들에게 바로 전달하는 일이에요.'},
+      {e:'🤖',n:'로봇 개발자',d:'부품을 조립하고 프로그램을 넣어 움직이는 로봇을 만드는 일이에요.'}
+    ],
+    fits:[
+      {code:'I',why:'탐구형과 함께하면 “왜 고장 났지?” 원리까지 파고들 수 있어요.',
+       acts:['과학 실험 + 만들기 연계','기술 동아리 프로젝트','발명 대회 참가']},
+      {code:'C',why:'관습형과 함께하면 작업 순서를 체계적으로 관리하기 좋아요.',
+       acts:['도구·재료 체크리스트 만들기','안전 수칙 정리 포스터','실습 기록 일지 쓰기']}
+    ]},
+  I:{keywords:['호기심','분석력','집중력','논리적'],env:'궁금한 걸 깊이 파고들고, 자료를 조사·실험하며 답을 찾는 환경',
+    jobDetails:[
+      {e:'🔬',n:'과학자',d:'가설을 세우고 실험으로 자연 현상의 원리를 밝혀내는 일이에요.'},
+      {e:'📊',n:'데이터 분석가',d:'숫자와 정보를 모아 패턴을 찾고, 의미 있는 결론을 도출하는 일이에요.'},
+      {e:'🎮',n:'게임 기획자',d:'게임 규칙·밸런스·스토리를 논리적으로 설계하는 일이에요.'}
+    ],
+    fits:[
+      {code:'A',why:'예술형과 함께하면 조사한 내용을 창의적으로 표현할 수 있어요.',
+       acts:['탐구 주제 인포그래픽 만들기','과학 콘텐츠 영상 제작','탐구 발표 대회']},
+      {code:'R',why:'현실형과 함께하면 아이디어를 직접 만들어 검증할 수 있어요.',
+       acts:['실험 도구 직접 제작','메이커 프로젝트','현장 조사 + 시제품 만들기']}
+    ]},
+  A:{keywords:['표현력','감수성','창의력','개성'],env:'자유롭게 아이디어를 내고, 나만의 방식으로 보여줄 수 있는 환경',
+    jobDetails:[
+      {e:'🎨',n:'디자이너',d:'색·모양·구성으로 메시지를 시각적으로 전달하는 일이에요.'},
+      {e:'📱',n:'유튜버',d:'영상·음성·스토리로 나만의 콘텐츠를 기획하고 제작하는 일이에요.'},
+      {e:'✏️',n:'웹툰 작가',d:'그림과 대사로 이야기를 창작해 독자에게 감동을 전하는 일이에요.'}
+    ],
+    fits:[
+      {code:'E',why:'진취형과 함께하면 작품을 기획하고 사람들에게 알릴 수 있어요.',
+       acts:['학교 축제 포스터·영상 제작','콘텐츠 기획안 쓰기','전시·공연 기획']},
+      {code:'I',why:'탐구형과 함께하면 주제를 깊이 있게 담은 작품을 만들 수 있어요.',
+       acts:['탐구 결과 시각화','주제 다큐 만들기','리서치 기반 창작']}
+    ]},
+  S:{keywords:['공감','소통','협력','배려'],env:'사람들과 함께하고, 도움이 필요한 이웃을 직접 돕는 환경',
+    jobDetails:[
+      {e:'👩‍🏫',n:'선생님',d:'학생의 성장을 돕고, 배움의 즐거움을 함께 나누는 일이에요.'},
+      {e:'💬',n:'상담사',d:'고민을 들어주고 마음을 이해하며 해결 방향을 함께 찾는 일이에요.'},
+      {e:'🏥',n:'간호사',d:'환자를 돌보고 건강 회복을 위해 세심하게 지원하는 일이에요.'}
+    ],
+    fits:[
+      {code:'E',why:'진취형과 함께하면 봉사·멘토링 활동을 이끌기 좋아요.',
+       acts:['또래 멘토링 프로그램','봉사 동아리 운영','학급 화합 캠페인']},
+      {code:'A',why:'예술형과 함께하면 감정을 표현하며 관계를 돕기 좋아요.',
+       acts:['마음 나눔 포스터','친구 응원 영상','감정 일기·편지 쓰기']}
+    ]},
+  E:{keywords:['리더십','추진력','설득력','도전'],env:'목표를 세우고, 사람들을 모아 함께 실행하는 환경',
+    jobDetails:[
+      {e:'🚀',n:'창업가',d:'새로운 아이디어로 서비스나 제품을 만들고 시장에 내놓는 일이에요.'},
+      {e:'📣',n:'마케터',d:'제품·브랜드의 매력을 알리고 사람들의 관심을 끄는 일이에요.'},
+      {e:'📋',n:'기획자',d:'프로젝트 목표와 일정을 정하고 팀이 함께 움직이게 하는 일이에요.'}
+    ],
+    fits:[
+      {code:'S',why:'사회형과 함께하면 팀원 마음을 헤아리며 이끌 수 있어요.',
+       acts:['학급·동아리 회장 체험','팀 프로젝트 리더','친구 설문으로 기획안 검증']},
+      {code:'C',why:'관습형과 함께하면 계획을 꼼꼼히 세워 실행하기 좋아요.',
+       acts:['행사 예산·일정표 짜기','역할 분담표 만들기','체크리스트로 진행 관리']}
+    ]},
+  C:{keywords:['꼼꼼함','정확성','책임감','정리력'],env:'규칙과 절차가 분명하고, 자료를 체계적으로 관리하는 환경',
+    jobDetails:[
+      {e:'📒',n:'회계사',d:'수입·지출을 정확히 기록하고 재무 상태를 관리하는 일이에요.'},
+      {e:'🏛️',n:'공무원',d:'정해진 절차에 따라 시민을 위해 행정 업무를 처리하는 일이에요.'},
+      {e:'🗂️',n:'데이터 관리자',d:'정보를 분류·저장하고 필요할 때 바로 찾을 수 있게 관리하는 일이에요.'}
+    ],
+    fits:[
+      {code:'I',why:'탐구형과 함께하면 자료를 분석해 더 정확한 결론을 낼 수 있어요.',
+       acts:['조사 자료 표·그래프 정리','통계로 학급 설문 분석','탐구 노트 체계화']},
+      {code:'E',why:'진취형과 함께하면 정리된 계획으로 프로젝트를 성공시키기 좋아요.',
+       acts:['행사 운영 매뉴얼 작성','예산·재고 관리','일정 관리 보조']}
+    ]},
+};
+
+const QUESTIONS = [
+  {scene:'🎪', q:'드디어 축제 시작! 🎉<br>제일 먼저 어디로 갈까?', opts:[
+    {e:'🔧', t:'직접 만드는 체험 부스', type:'R'},{e:'🔍', t:'과학 미스터리 방탈출', type:'I'},
+    {e:'🎨', t:'그림·포토존 꾸미기 부스', type:'A'},{e:'🎤', t:'친구들 다 모인 노래 부스', type:'S'}]},
+  {scene:'🛠️', q:'우리 반 부스에 일손이 부족해!<br>너의 역할은?', opts:[
+    {e:'📣', t:'손님 끌어모으는 호객 담당', type:'E'},{e:'💰', t:'입장료·재고 정리하는 운영', type:'C'},
+    {e:'🔨', t:'무너진 부스 다시 세우기', type:'R'},{e:'📋', t:'게임 규칙 만들고 설명하기', type:'I'}]},
+  {scene:'🎤', q:'중앙 무대에서 공연 시작!<br>너는 어떻게 할까?', opts:[
+    {e:'🎸', t:'무대에 올라 직접 공연한다', type:'A'},{e:'🙌', t:'친구 응원하며 분위기 띄운다', type:'S'},
+    {e:'🎬', t:'순서 짜고 MC를 맡는다', type:'E'},{e:'⏰', t:'시간표대로 착착 진행 관리', type:'C'}]},
+  {scene:'⚡', q:'앗! 부스 전기가 나갔다.<br>너의 행동은?', opts:[
+    {e:'🔌', t:'직접 선을 만져 고쳐본다', type:'R'},{e:'🤔', t:'원인이 뭔지 차근차근 찾는다', type:'I'},
+    {e:'💡', t:'어두운 김에 분위기 있게 꾸민다', type:'A'},{e:'🆘', t:'선생님·친구 불러 같이 해결', type:'S'}]},
+  {scene:'🍜', q:'배고프다! 푸드존 도착!<br>너는?', opts:[
+    {e:'🗣️', t:'"이거 먹자!" 메뉴 정해 주문', type:'E'},{e:'🧾', t:'N빵 계산하고 영수증 정리', type:'C'},
+    {e:'🍳', t:'요리 체험존에서 직접 만들기', type:'R'},{e:'🌍', t:'어느 나라 음식인지 찾아보기', type:'I'}]},
+  {scene:'🌅', q:'축제가 끝나간다.<br>마지막으로 뭘 할까?', opts:[
+    {e:'📸', t:'추억 사진·영상으로 남기기', type:'A'},{e:'👋', t:'친구들과 소감 나누며 마무리', type:'S'},
+    {e:'🎉', t:'뒤풀이 계획 짜서 다 같이 가기', type:'E'},{e:'🧹', t:'부스 정리하고 체크리스트 확인', type:'C'}]},
+];
+
+let answers=new Array(QUESTIONS.length).fill(null), answersIdx=new Array(QUESTIONS.length).fill(null), qIndex=0, locking=false;
+const app=document.getElementById('app');
+function topbar(){return `<div class="topbar"><span class="pill">🎪 직업 흥미 대모험</span></div>`;}
+
+function renderIntro(){
+  locking=false;
+  app.innerHTML=topbar()+`
+    <div class="card intro">
+      <div class="emoji">🎪</div>
+      <h1>직업 흥미<br>대모험</h1>
+      <p class="sub">오늘은 우리 학교 축제날! 🎉<br>6개의 순간, 너의 선택은?</p>
+      <span class="hint-chip">정답은 없어! 가장 '나' 같은 걸 골라봐 ✨</span>
+      <button class="btn pulse" id="startBtn" style="margin-top:14px">시작하기 →</button>
+    </div>`;
+  document.getElementById('startBtn').onclick=()=>{qIndex=0;renderQuestion();};
+}
+
+function renderQuestion(){
+  locking=false;
+  const Q=QUESTIONS[qIndex];
+  const pct=Math.round(((qIndex+1)/QUESTIONS.length)*100);
+  const optsHtml=Q.opts.map((o,i)=>{
+    const sel=answersIdx[qIndex]===i?'sel':'';
+    return `<button class="opt ${sel}" data-i="${i}" data-type="${o.type}"><span class="oe">${o.e}</span><span class="ot">${o.t}</span><span class="check">✅</span></button>`;
+  }).join('');
+  app.innerHTML=topbar()+`
+    <div class="progress-wrap">
+      <div class="progress-top"><span class="label">진행률</span><span class="count">${qIndex+1} / ${QUESTIONS.length}</span></div>
+      <div class="track"><div class="fill" style="width:${pct}%"></div></div>
+    </div>
+    <div class="card q-card">
+      <div class="scene">${Q.scene}</div>
+      <div class="q-text">${Q.q}</div>
+      <div class="options">${optsHtml}</div>
+    </div>
+    <div class="nav"><button class="btn ghost back">← 이전</button></div>`;
+  document.querySelectorAll('.opt').forEach(btn=>{
+    btn.onclick=()=>{
+      if(locking)return; locking=true;
+      answers[qIndex]=btn.dataset.type; answersIdx[qIndex]=+btn.dataset.i;
+      document.querySelectorAll('.opt').forEach(b=>b.classList.remove('sel')); btn.classList.add('sel');
+      setTimeout(()=>{ if(qIndex<QUESTIONS.length-1){qIndex++;renderQuestion();} else {renderResult();} },420);
+    };
+  });
+  document.querySelector('.back').onclick=()=>{ if(qIndex===0){renderIntro();} else {qIndex--;renderQuestion();} };
+}
+
+function computeScores(){const s={R:0,I:0,A:0,S:0,E:0,C:0};answers.forEach(a=>{if(a)s[a]++;});return s;}
+function pickTop(sc,ex){let b=null,v=-1;ORDER.forEach(k=>{if(k===ex)return;if(sc[k]>v){v=sc[k];b=k;}});return b;}
+function tint(hex,a){const n=parseInt(hex.slice(1),16);return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`;}
+
+function buildRadar(scores,hex){
+  const cx=150,cy=150,R=98,maxScale=Math.max(...Object.values(scores),1);
+  let bg='';
+  [0.25,0.5,0.75,1].forEach(p=>{
+    const pts=ORDER.map((k,i)=>{const a=(-90+i*60)*Math.PI/180;return `${cx+Math.cos(a)*R*p},${cy+Math.sin(a)*R*p}`;}).join(' ');
+    bg+=`<polygon points="${pts}" fill="none" stroke="#eadfe8" stroke-width="1.5"/>`;
+  });
+  ORDER.forEach((k,i)=>{const a=(-90+i*60)*Math.PI/180;bg+=`<line x1="${cx}" y1="${cy}" x2="${cx+Math.cos(a)*R}" y2="${cy+Math.sin(a)*R}" stroke="#eadfe8" stroke-width="1.5"/>`;});
+  const poly=ORDER.map((k,i)=>{const a=(-90+i*60)*Math.PI/180;const r=R*(scores[k]/maxScale);return `${cx+Math.cos(a)*r},${cy+Math.sin(a)*r}`;}).join(' ');
+  let dots='',labels='';
+  ORDER.forEach((k,i)=>{
+    const a=(-90+i*60)*Math.PI/180;const r=R*(scores[k]/maxScale);
+    dots+=`<circle cx="${cx+Math.cos(a)*r}" cy="${cy+Math.sin(a)*r}" r="6" fill="${TYPES[k].hex}"/>`;
+    const lx=cx+Math.cos(a)*(R+26), ly=cy+Math.sin(a)*(R+26);
+    labels+=`<text x="${lx}" y="${ly+5}" text-anchor="middle" font-family="Jua" font-size="18" fill="${TYPES[k].hex}">${TYPES[k].name.replace('형','')}</text>`;
+  });
+  return `<svg class="radar-svg" viewBox="0 0 300 300">${bg}<polygon points="${poly}" fill="${tint(hex,0.32)}" stroke="${hex}" stroke-width="3.2"/>${dots}${labels}</svg>`;
+}
+
+function buildGuide(P,hex){
+  const g=CAREER_EXTRA[P]; if(!g) return '';
+  const kws=g.keywords.map(k=>`<span class="kw">${k}</span>`).join('');
+  const cards=g.jobDetails.map((j,i)=>`
+    <div class="job-card" style="animation-delay:${0.1+i*0.08}s">
+      <div class="jh"><span class="ji">${j.e}</span><span class="jn">${j.n}</span></div>
+      <p class="jd">${j.d}</p>
+    </div>`).join('');
+  const fits=g.fits.map(f=>{
+    const ft=TYPES[f.code];
+    const acts=f.acts.map(a=>`<span class="act">${a}</span>`).join('');
+    return `<div class="fit-item">
+      <div class="fit-top"><span class="fit-badge" style="background:${ft.hex}">${ft.name}</span></div>
+      <p class="fit-why">${f.why}</p>
+      <div class="act-row">${acts}</div>
+    </div>`;
+  }).join('');
+  return `
+    <div class="card guide">
+      <span class="st">✨ 나의 강점 키워드</span>
+      <div class="kw-row">${kws}</div>
+      <div class="env-box">
+        <div class="el">🌱 잘 맞는 환경</div>
+        <p>${g.env}</p>
+      </div>
+    </div>
+    <div class="card guide">
+      <span class="st">💼 직업 한눈에 보기</span>
+      <div class="job-cards">${cards}</div>
+    </div>
+    <div class="card guide">
+      <span class="st">🤝 잘 맞는 유형 + 추천 활동</span>
+      <div class="fit-list">${fits}</div>
+    </div>`;
+}
+
+function renderResult(previewType){
+  let scores;
+  if(previewType){scores={R:0,I:0,A:0,S:0,E:0,C:0};scores[previewType]=6;}
+  else scores=computeScores();
+  const P=previewType||pickTop(scores,null), Sub=pickTop(scores,P);
+  const T=TYPES[P], S=TYPES[Sub];
+  const radar=buildRadar(scores,T.hex);
+  const jobs=T.jobs.map((j,i)=>`<span class="job" style="background:${T.hex};animation-delay:${0.15+i*0.07}s">${j}</span>`).join('');
+  const guide=buildGuide(P,T.hex);
+  const previewNote=previewType?'<span class="preview-chip">👀 진로시간 예시 미리보기</span>':'';
+  app.innerHTML=topbar()+`
+    <div class="res">
+      <div class="card">
+        <div class="tiny">나의 직업 흥미 유형은?${previewNote}</div>
+        <div class="radar-center">${radar}</div>
+        <div class="type-line">
+          <span class="mini-masc">${mascot(P)}</span>
+          <span class="type-name" style="color:${T.hex}">${T.name} (${T.code})</span>
+        </div>
+        <div class="charname" style="color:${T.hex}">${T.charName}</div>
+      </div>
+      <div class="card interp">
+        <div class="badge-row"><span class="bdg gold">🥇 ${T.name}</span><span class="bdg silver">🥈 ${S.name}</span></div>
+        <p>너의 강점은 <b style="color:${T.hex}">${T.name}</b>! ${T.desc}<br>거기에 <b style="color:${S.hex}">${S.name}</b>의 ${S.support}도 살짝 더해졌어 ✨</p>
+      </div>
+      ${guide}
+      <div class="card jobs-wrap">
+        <span class="jt">💼 이런 직업 어때?</span>
+        <div class="jobs">${jobs}</div>
+      </div>
+      <div class="res-actions">
+        <button class="btn" id="retry">🔄 다시 검사하기</button>
+        <div class="capture-hint">📸 결과를 캡처해서 친구·선생님과 나눠봐!</div>
+      </div>
+    </div>`;
+  launchConfetti();
+  document.getElementById('retry').onclick=()=>{
+    answers=new Array(QUESTIONS.length).fill(null); answersIdx=new Array(QUESTIONS.length).fill(null); qIndex=0; renderIntro();
+  };
+}
+
+function launchConfetti(){
+  const cols=['#FF6B6B','#F06595','#9775FA','#4DABF7','#51CF66','#FCC419','#FF9A3D'];
+  for(let i=0;i<42;i++){const c=document.createElement('div');c.className='confetti';
+    c.style.left=Math.random()*100+'vw';c.style.background=cols[i%cols.length];
+    c.style.animationDuration=(2.4+Math.random()*1.7)+'s';c.style.animationDelay=(Math.random()*0.5)+'s';
+    if(Math.random()>0.5)c.style.borderRadius='50%';c.style.width=c.style.height=(8+Math.random()*7)+'px';
+    document.body.appendChild(c);setTimeout(()=>c.remove(),4700);}
+}
+const previewParam=new URLSearchParams(location.search).get('preview')?.toUpperCase();
+if(previewParam&&TYPES[previewParam]) renderResult(previewParam);
+else renderIntro();
+</script>
+</body>
+</html>
