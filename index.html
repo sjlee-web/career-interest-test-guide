@@ -88,7 +88,8 @@
   .res-slide{flex:0 0 100%;width:100%;scroll-snap-align:start;scroll-snap-stop:always;padding:0 1px;box-sizing:border-box;display:flex;min-height:0;height:100%;align-self:stretch}
   .res-slide-inner{flex:1;min-height:0;width:100%;height:100%;display:flex;flex-direction:column}
   .res-slide .card{flex:1;min-height:0;overflow:hidden;touch-action:none}
-  .slide-body{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:8px}
+  .slide-body{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:flex-start;gap:8px}
+  .slide-body.centered{justify-content:center}
   .slide-top{flex-shrink:0}
   .page-chip{font-family:'Jua',sans-serif;font-size:13px;color:var(--ink-soft);text-align:center;margin-bottom:6px;flex-shrink:0}
   .res-dots{display:flex;justify-content:center;gap:5px;margin:6px 0 2px;flex-shrink:0;flex-wrap:wrap;max-width:100%;padding:0 4px}
@@ -133,7 +134,9 @@
   .job-mini .jb{min-width:0}
   .job-mini .jn{font-family:'Jua',sans-serif;font-size:15px;line-height:1.2;display:block}
   .job-mini .jd{font-weight:700;font-size:13px;line-height:1.35;color:var(--ink-soft);margin:2px 0 0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-  .job-minis{display:flex;flex-direction:column;gap:6px}
+  .job-minis{display:flex;flex-direction:column;gap:5px}
+  .slide-body.dense .env-box{padding:8px 10px}
+  .slide-body.dense .job-mini{padding:7px 9px}
   .fit-list{display:flex;flex-direction:column;gap:7px}
   .fit-item{border-radius:14px;padding:10px 11px;background:#fff;border:2px solid #efe6ee}
   .fit-top{display:flex;align-items:center;gap:6px;margin-bottom:4px}
@@ -405,7 +408,7 @@ function buildRadar(scores,hex){
   return `<svg class="radar-svg" viewBox="0 0 300 300">${bg}<polygon points="${poly}" fill="${tint(hex,0.32)}" stroke="${hex}" stroke-width="3.2"/>${dots}${labels}</svg>`;
 }
 
-const SLIDE_LABELS=['나의 유형','성격·특징','전공·강점','직업 소개','궁합·활동','진로 탐색'];
+const SLIDE_LABELS=['나의 유형','성격·전공','강점·직업','궁합·활동','진로 탐색'];
 
 function buildResultSlides(P,T,S,radar,jobs){
   const g=CAREER_EXTRA[P];
@@ -426,7 +429,7 @@ function buildResultSlides(P,T,S,radar,jobs){
   return [
     `<div class="res-slide res-slide--main"><div class="res-slide-inner">
       <div class="card">
-        <div class="slide-body">
+        <div class="slide-body centered">
           <div class="slide-top">
             <div class="tiny">나의 직업 흥미 유형은?</div>
             <div class="radar-center">${radar}</div>
@@ -448,28 +451,21 @@ function buildResultSlides(P,T,S,radar,jobs){
           <div class="info-box"><p>${g.personality}</p></div>
           <span class="st">✨ 이런 특징이 있어요</span>
           <ul class="trait-list compact">${traits}</ul>
+          <span class="st">🎓 추천 전공 계열</span>
+          <div class="major-row">${majors}</div>
         </div>
       </div>
     </div></div>`,
     `<div class="res-slide"><div class="res-slide-inner">
       <div class="card guide">
         <div class="slide-body dense">
-          <span class="st">🎓 추천 전공 계열</span>
-          <div class="major-row">${majors}</div>
           <span class="st">✨ 나의 강점 키워드</span>
           <div class="kw-row">${kws}</div>
           <div class="env-box">
             <div class="el">🌱 잘 맞는 환경</div>
             <p>${g.env}</p>
           </div>
-        </div>
-      </div>
-    </div></div>`,
-    `<div class="res-slide"><div class="res-slide-inner">
-      <div class="card guide">
-        <div class="slide-body">
           <span class="st">💼 직업 한눈에 보기</span>
-          <p class="slide-note">이런 일을 할 때 흥미가 잘 살아나요</p>
           <div class="job-minis">${jobMinis}</div>
         </div>
       </div>
