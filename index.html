@@ -83,12 +83,14 @@
   .page-turn:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 #e4d8e2}
   .page-turn:disabled{opacity:.35;cursor:default;box-shadow:0 2px 0 #eee}
   .page-turn .arr{display:block;font-size:20px;line-height:1}
-  .res-carousel{flex:1;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;min-height:0;height:100%;touch-action:pan-x;align-items:stretch}
+  .res-carousel{flex:1;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;min-height:0;height:100%;touch-action:pan-x pinch-zoom;align-items:stretch}
   .res-carousel::-webkit-scrollbar{display:none}
   .res-slide{flex:0 0 100%;width:100%;scroll-snap-align:start;scroll-snap-stop:always;padding:0 1px;box-sizing:border-box;display:flex;min-height:0;height:100%;align-self:stretch}
   .res-slide-inner{flex:1;min-height:0;width:100%;height:100%;display:flex;flex-direction:column}
-  .res-slide .card{flex:1;min-height:0;overflow:hidden;touch-action:none}
-  .slide-body{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:flex-start;gap:8px}
+  .res-slide .card{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;touch-action:pan-y;padding-bottom:18px}
+  .res-slide .card::-webkit-scrollbar{width:4px}
+  .res-slide .card::-webkit-scrollbar-thumb{background:#eadfe8;border-radius:999px}
+  .slide-body{flex:1;min-height:min-content;display:flex;flex-direction:column;justify-content:flex-start;gap:8px}
   .slide-body.centered{justify-content:center}
   .slide-top{flex-shrink:0}
   .page-chip{font-family:'Jua',sans-serif;font-size:13px;color:var(--ink-soft);text-align:center;margin-bottom:6px;flex-shrink:0}
@@ -133,7 +135,7 @@
   .job-mini .ji{font-size:20px;line-height:1;flex-shrink:0}
   .job-mini .jb{min-width:0}
   .job-mini .jn{font-family:'Jua',sans-serif;font-size:15px;line-height:1.2;display:block}
-  .job-mini .jd{font-weight:700;font-size:13px;line-height:1.35;color:var(--ink-soft);margin:2px 0 0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .job-mini .jd{font-weight:700;font-size:13px;line-height:1.35;color:var(--ink-soft);margin:2px 0 0}
   .job-minis{display:flex;flex-direction:column;gap:5px}
   .slide-body.dense .env-box{padding:8px 10px}
   .slide-body.dense .job-mini{padding:7px 9px}
