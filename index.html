@@ -155,6 +155,17 @@
   .jobs.compact .job{font-size:14px;padding:6px 11px}
   .desc-line{font-weight:700;font-size:14px;line-height:1.4;text-align:center;margin:0}
   .slide-note{font-weight:700;font-size:12px;color:var(--ink-soft);text-align:center;margin:0 0 4px;line-height:1.3}
+  .slide-body.dense{gap:6px;justify-content:flex-start}
+  .slide-body.dense .st{margin-bottom:4px}
+  .trait-list.compact{gap:4px}
+  .trait-list.compact li{font-size:13px;padding:5px 9px}
+  .fit-list.tight{gap:5px}
+  .fit-list.tight .fit-item{padding:8px 9px}
+  .fit-list.tight .fit-why{font-size:13px;margin-bottom:4px;-webkit-line-clamp:2}
+  .finish-box{text-align:center;border-radius:16px;padding:12px 14px;background:linear-gradient(135deg,#FFF8FC,#F0FFF4);border:2px dashed #eadfe8;margin-top:6px}
+  .finish-box .fe{font-size:28px;line-height:1;margin-bottom:6px}
+  .finish-box .ft{font-family:'Jua',sans-serif;font-size:16px;color:var(--brand-dark);margin-bottom:5px}
+  .finish-box .fm{font-weight:700;font-size:13px;line-height:1.45;color:var(--ink-soft);margin:0}
 
   .res-actions{margin-top:0}
 
@@ -394,7 +405,7 @@ function buildRadar(scores,hex){
   return `<svg class="radar-svg" viewBox="0 0 300 300">${bg}<polygon points="${poly}" fill="${tint(hex,0.32)}" stroke="${hex}" stroke-width="3.2"/>${dots}${labels}</svg>`;
 }
 
-const SLIDE_LABELS=['나의 유형','나의 성격','이런 특징','추천 전공','강점·환경','직업 소개','궁합 ①','궁합 ②','추천 직업'];
+const SLIDE_LABELS=['나의 유형','성격·특징','전공·강점','직업 소개','궁합·활동','진로 탐색'];
 
 function buildResultSlides(P,T,S,radar,jobs){
   const g=CAREER_EXTRA[P];
@@ -432,34 +443,19 @@ function buildResultSlides(P,T,S,radar,jobs){
     </div></div>`,
     `<div class="res-slide"><div class="res-slide-inner">
       <div class="card guide">
-        <div class="slide-body">
+        <div class="slide-body dense">
           <span class="st">🧠 나의 성격</span>
           <div class="info-box"><p>${g.personality}</p></div>
-          <p class="desc-line" style="margin-top:4px">강점 키워드: <b style="color:${T.hex}">${T.support}</b></p>
-        </div>
-      </div>
-    </div></div>`,
-    `<div class="res-slide"><div class="res-slide-inner">
-      <div class="card guide">
-        <div class="slide-body">
           <span class="st">✨ 이런 특징이 있어요</span>
-          <p class="slide-note">학교생활에서 자주 보이는 모습이에요</p>
-          <ul class="trait-list">${traits}</ul>
+          <ul class="trait-list compact">${traits}</ul>
         </div>
       </div>
     </div></div>`,
     `<div class="res-slide"><div class="res-slide-inner">
       <div class="card guide">
-        <div class="slide-body">
+        <div class="slide-body dense">
           <span class="st">🎓 추천 전공 계열</span>
-          <p class="slide-note">중·고등 진로 탐색 때 참고해 봐요!</p>
           <div class="major-row">${majors}</div>
-        </div>
-      </div>
-    </div></div>`,
-    `<div class="res-slide"><div class="res-slide-inner">
-      <div class="card guide">
-        <div class="slide-body">
           <span class="st">✨ 나의 강점 키워드</span>
           <div class="kw-row">${kws}</div>
           <div class="env-box">
@@ -480,28 +476,23 @@ function buildResultSlides(P,T,S,radar,jobs){
     </div></div>`,
     `<div class="res-slide"><div class="res-slide-inner">
       <div class="card guide">
-        <div class="slide-body">
-          <span class="st">🤝 잘 맞는 유형 ①</span>
+        <div class="slide-body dense">
+          <span class="st">🤝 잘 맞는 유형 + 활동</span>
           <p class="slide-note">함께하면 시너지가 나는 친구 유형이에요</p>
-          <div class="fit-list">${fitHtml(g.fits[0])}</div>
+          <div class="fit-list tight">${g.fits.map(fitHtml).join('')}</div>
         </div>
       </div>
     </div></div>`,
-    `<div class="res-slide"><div class="res-slide-inner">
+    `<div class="res-slide res-slide--finish"><div class="res-slide-inner">
       <div class="card guide">
-        <div class="slide-body">
-          <span class="st">🤝 잘 맞는 유형 ②</span>
-          <p class="slide-note">이 유형과 함께 추천 활동을 해 봐요</p>
-          <div class="fit-list">${fitHtml(g.fits[1])}</div>
-        </div>
-      </div>
-    </div></div>`,
-    `<div class="res-slide"><div class="res-slide-inner">
-      <div class="card guide">
-        <div class="slide-body">
+        <div class="slide-body dense">
           <span class="st">💼 이런 직업 어때?</span>
-          <p class="slide-note">관심 가는 직업을 골라 탐색해 봐요</p>
           <div class="jobs-wrap"><div class="jobs compact">${jobs}</div></div>
+          <div class="finish-box">
+            <div class="fe">🎉</div>
+            <div class="ft">오늘의 검사 끝!</div>
+            <p class="fm">오늘 알아본 <b style="color:${T.hex}">${T.name}</b> 유형을<br>진로 탐색할 때 참고해 봐요.<br>선생님·친구와 이야기 나누며<br>나만의 길을 찾아가요 ✨</p>
+          </div>
         </div>
       </div>
     </div></div>`
@@ -523,7 +514,7 @@ function initResultCarousel(){
   const sync=()=>{
     const i=Math.round(carousel.scrollLeft/carousel.offsetWidth);
     dots.forEach((d,n)=>d.classList.toggle('on',n===i));
-    if(chip) chip.textContent=`${i+1} / ${total} · ${SLIDE_LABELS[i]}`;
+    if(chip) chip.textContent=i>=total-1?`🏁 마지막 · ${SLIDE_LABELS[i]}`:`${i+1} / ${total} · ${SLIDE_LABELS[i]}`;
     if(prev) prev.disabled=i<=0;
     if(next) next.disabled=i>=total-1;
   };
