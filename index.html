@@ -10,15 +10,20 @@
 <style>
   :root{--brand:#FF5C8A;--brand2:#FF9A3D;--brand-dark:#E03E6E;--ink:#3a2e3a;--ink-soft:#7a6b78}
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html,body{height:100%}
+  html,body{height:100%;height:100dvh}
   body{font-family:'Gaegu',sans-serif;color:var(--ink);background:linear-gradient(165deg,#FFF1F6,#F3F0FF 48%,#E7FBF3);
-    overflow-x:hidden;display:flex;flex-direction:column;align-items:center;min-height:100%}
+    overflow-x:hidden;overflow-y:auto;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:100dvh}
+  body.res-mode{overflow:hidden}
   .blob{position:fixed;border-radius:50%;filter:blur(38px);opacity:.5;z-index:0;animation:float 9s ease-in-out infinite}
   .b1{width:200px;height:200px;background:#FFD6E8;top:-40px;left:-50px}
   .b2{width:170px;height:170px;background:#D8E8FF;bottom:5%;right:-50px;animation-delay:-3s}
   .b3{width:150px;height:150px;background:#D9F7E6;top:40%;left:-60px;animation-delay:-5s}
   @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-22px)}}
-  #app{position:relative;z-index:1;width:100%;max-width:480px;padding:16px 18px 24px;display:flex;flex-direction:column;flex:1}
+  #app{position:relative;z-index:1;width:100%;max-width:480px;padding:12px 14px 10px;display:flex;flex-direction:column;flex:1;min-height:0;max-height:100dvh;margin:0 auto}
+  @media (min-width:600px){
+    body{background:linear-gradient(165deg,#EDE8F5,#E8E4F0 48%,#E0EDE8)}
+    #app{background:linear-gradient(165deg,#FFF1F6,#F3F0FF 48%,#E7FBF3);border-radius:28px;box-shadow:0 24px 60px rgba(80,60,90,.18),0 0 0 1px rgba(255,255,255,.6);padding:14px 16px 12px;max-height:min(100dvh,900px);margin:8px auto}
+  }
   h1,.jua,.btn{font-family:'Jua',sans-serif;font-weight:400}
 
   .topbar{display:flex;justify-content:center;margin-bottom:12px}
@@ -71,40 +76,41 @@
   .nav .btn.back{flex:0 0 38%}
 
   /* result */
-  .res{animation:slideup .5s ease both;flex:1;display:flex;flex-direction:column;width:100%;min-height:0;padding-bottom:4px}
-  .res .card{padding:16px 14px}
-  .res-carousel-wrap{flex:1;display:flex;align-items:stretch;gap:6px;min-height:0;max-height:calc(100dvh - 215px);width:100%}
-  .page-turn{flex:0 0 54px;width:54px;height:58px;border:none;border-radius:16px;background:#fff;color:var(--ink);font-family:'Jua',sans-serif;font-size:12px;line-height:1.1;box-shadow:0 4px 0 #e4d8e2;cursor:pointer;transition:transform .08s,opacity .15s;padding:4px 2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;align-self:center}
+  .res{animation:slideup .5s ease both;flex:1;display:flex;flex-direction:column;width:100%;min-height:0;overflow:hidden}
+  .res .card{padding:14px 12px;height:100%;display:flex;flex-direction:column;overflow:hidden}
+  .res-carousel-wrap{flex:1;display:flex;align-items:stretch;gap:4px;min-height:0;height:0;width:100%}
+  .page-turn{flex:0 0 46px;width:46px;height:52px;border:none;border-radius:14px;background:#fff;color:var(--ink);font-family:'Jua',sans-serif;font-size:11px;line-height:1.05;box-shadow:0 4px 0 #e4d8e2;cursor:pointer;transition:transform .08s,opacity .15s;padding:3px 2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;align-self:center;flex-shrink:0}
   .page-turn:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 #e4d8e2}
   .page-turn:disabled{opacity:.35;cursor:default;box-shadow:0 2px 0 #eee}
-  .page-turn .arr{display:block;font-size:22px;line-height:1}
-  .res-carousel{flex:1;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;min-height:0;touch-action:pan-x pinch-zoom;align-items:stretch}
+  .page-turn .arr{display:block;font-size:20px;line-height:1}
+  .res-carousel{flex:1;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;min-height:0;height:100%;touch-action:pan-x;align-items:stretch}
   .res-carousel::-webkit-scrollbar{display:none}
-  .res-slide{flex:0 0 100%;width:100%;scroll-snap-align:start;scroll-snap-stop:always;padding:0 1px;box-sizing:border-box;display:flex;min-height:0;align-self:stretch}
-  .res-slide-inner{flex:1;min-height:0;width:100%;display:flex;flex-direction:column}
-  .res-slide .card{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;touch-action:pan-y;padding-bottom:20px}
-  .res-slide .card::-webkit-scrollbar{width:5px}
-  .res-slide .card::-webkit-scrollbar-thumb{background:#eadfe8;border-radius:999px}
-  .page-chip{font-family:'Jua',sans-serif;font-size:14px;color:var(--ink-soft);text-align:center;margin-bottom:8px}
-  .res-dots{display:flex;justify-content:center;gap:7px;margin:10px 0 6px}
-  .dot{width:9px;height:9px;border-radius:50%;background:#e4d8e2;border:none;padding:0;transition:transform .2s,background .2s}
-  .dot.on{background:var(--brand);transform:scale(1.15)}
-  .res-nav{display:flex;align-items:center;justify-content:center;gap:12px;margin:10px 0 4px}
-  .swipe-hint{text-align:center;font-weight:700;font-size:14px;color:var(--ink-soft);margin-bottom:6px}
-  .res-foot{margin-top:auto;padding-top:4px}
-  .tiny{font-family:'Jua',sans-serif;font-size:15px;color:var(--ink-soft);text-align:center;margin-bottom:6px}
-  .radar-center{max-width:240px;margin:4px auto 0}
-  .res-slide--main .radar-center{max-width:220px}
+  .res-slide{flex:0 0 100%;width:100%;scroll-snap-align:start;scroll-snap-stop:always;padding:0 1px;box-sizing:border-box;display:flex;min-height:0;height:100%;align-self:stretch}
+  .res-slide-inner{flex:1;min-height:0;width:100%;height:100%;display:flex;flex-direction:column}
+  .res-slide .card{flex:1;min-height:0;overflow:hidden;touch-action:none}
+  .slide-body{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:8px}
+  .slide-top{flex-shrink:0}
+  .page-chip{font-family:'Jua',sans-serif;font-size:13px;color:var(--ink-soft);text-align:center;margin-bottom:6px;flex-shrink:0}
+  .res-dots{display:flex;justify-content:center;gap:5px;margin:6px 0 2px;flex-shrink:0;flex-wrap:wrap;max-width:100%;padding:0 4px}
+  .dot{width:7px;height:7px;border-radius:50%;background:#e4d8e2;border:none;padding:0;transition:transform .2s,background .2s;flex-shrink:0}
+  .dot.on{background:var(--brand);transform:scale(1.2)}
+  .res-nav{display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .swipe-hint{text-align:center;font-weight:700;font-size:13px;color:var(--ink-soft);margin-bottom:4px;flex-shrink:0}
+  .res-foot{flex-shrink:0;padding-top:2px}
+  .res-foot .btn{font-size:17px;padding:11px}
+  .tiny{font-family:'Jua',sans-serif;font-size:14px;color:var(--ink-soft);text-align:center;margin-bottom:2px}
+  .radar-center{max-width:168px;margin:0 auto}
+  .res-slide--main .radar-center{max-width:158px}
   .radar-svg{display:block;width:100%}
-  .type-line{display:flex;align-items:center;justify-content:center;gap:9px;margin-top:10px}
-  .mini-masc{width:44px;flex-shrink:0;line-height:0}
-  .mini-masc svg{width:44px;height:auto;display:block;animation:none}
-  .type-name{font-family:'Jua',sans-serif;font-size:29px;line-height:1.1}
-  .charname{font-family:'Jua',sans-serif;font-size:19px;text-align:center;margin-top:2px}
+  .type-line{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:4px}
+  .mini-masc{width:38px;flex-shrink:0;line-height:0}
+  .mini-masc svg{width:38px;height:auto;display:block;animation:none}
+  .type-name{font-family:'Jua',sans-serif;font-size:24px;line-height:1.1}
+  .charname{font-family:'Jua',sans-serif;font-size:16px;text-align:center;margin-top:1px}
 
-  .interp{margin-top:11px;padding:15px 16px}
-  .badge-row{display:flex;gap:7px;justify-content:center;margin-bottom:9px}
-  .bdg{font-family:'Jua',sans-serif;font-size:15px;padding:6px 14px;border-radius:999px}
+  .interp{margin-top:8px;padding:10px 12px}
+  .badge-row{display:flex;gap:6px;justify-content:center;margin-bottom:4px}
+  .bdg{font-family:'Jua',sans-serif;font-size:13px;padding:5px 11px;border-radius:999px}
   .bdg.gold{background:#FFF1C9;color:#946400}
   .bdg.silver{background:#ECEFF3;color:#5B6470}
   .interp p{font-weight:700;font-size:17px;line-height:1.5;text-align:center;margin:0}
@@ -116,32 +122,39 @@
   @keyframes jobin{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
 
   .guide{margin-top:0}
-  .guide .st{font-family:'Jua',sans-serif;font-size:16px;display:block;margin:0 0 8px}
-  .kw-row{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:11px}
-  .kw{font-family:'Gaegu',sans-serif;font-weight:700;font-size:16px;padding:7px 13px;border-radius:999px;background:#FBF7FB;border:2px solid #efe6ee}
-  .env-box{background:linear-gradient(135deg,#FFF8FC,#F8F4FF);border-radius:16px;padding:13px 14px;border:2px dashed #eadfe8}
-  .env-box .el{font-family:'Jua',sans-serif;font-size:15px;color:var(--ink-soft);margin-bottom:5px}
-  .env-box p{font-weight:700;font-size:16px;line-height:1.45;margin:0}
-  .job-cards{display:flex;flex-direction:column;gap:9px}
-  .job-card{border-radius:16px;padding:13px 14px;background:#FBF7FB;border:2px solid #efe6ee;animation:jobin .4s ease both}
-  .job-card .jh{display:flex;align-items:center;gap:8px;margin-bottom:6px}
-  .job-card .ji{font-size:22px;line-height:1}
-  .job-card .jn{font-family:'Jua',sans-serif;font-size:18px}
-  .job-card .jd{font-weight:700;font-size:15px;line-height:1.4;color:var(--ink-soft);margin:0}
-  .job-card{padding:11px 12px}
-  .fit-list{display:flex;flex-direction:column;gap:10px}
-  .fit-item{border-radius:16px;padding:13px 14px;background:#fff;border:2.5px solid #efe6ee}
-  .fit-top{display:flex;align-items:center;gap:8px;margin-bottom:7px}
-  .fit-badge{font-family:'Jua',sans-serif;font-size:15px;padding:5px 12px;border-radius:999px;color:#fff}
-  .fit-why{font-weight:700;font-size:16px;line-height:1.4;margin:0 0 8px}
-  .act-row{display:flex;flex-wrap:wrap;gap:6px}
-  .act{font-family:'Gaegu',sans-serif;font-weight:700;font-size:15px;padding:6px 11px;border-radius:999px;background:#FFF8E8;border:2px solid #FFE8A8}
+  .guide .st{font-family:'Jua',sans-serif;font-size:15px;display:block;margin:0 0 6px}
+  .kw-row{display:flex;flex-wrap:wrap;gap:5px;justify-content:center}
+  .kw{font-family:'Gaegu',sans-serif;font-weight:700;font-size:14px;padding:5px 10px;border-radius:999px;background:#FBF7FB;border:2px solid #efe6ee}
+  .env-box{background:linear-gradient(135deg,#FFF8FC,#F8F4FF);border-radius:14px;padding:10px 12px;border:2px dashed #eadfe8}
+  .env-box .el{font-family:'Jua',sans-serif;font-size:13px;color:var(--ink-soft);margin-bottom:3px}
+  .env-box p{font-weight:700;font-size:14px;line-height:1.4;margin:0}
+  .job-mini{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border-radius:12px;background:#FBF7FB;border:2px solid #efe6ee}
+  .job-mini .ji{font-size:20px;line-height:1;flex-shrink:0}
+  .job-mini .jb{min-width:0}
+  .job-mini .jn{font-family:'Jua',sans-serif;font-size:15px;line-height:1.2;display:block}
+  .job-mini .jd{font-weight:700;font-size:13px;line-height:1.35;color:var(--ink-soft);margin:2px 0 0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .job-minis{display:flex;flex-direction:column;gap:6px}
+  .fit-list{display:flex;flex-direction:column;gap:7px}
+  .fit-item{border-radius:14px;padding:10px 11px;background:#fff;border:2px solid #efe6ee}
+  .fit-top{display:flex;align-items:center;gap:6px;margin-bottom:4px}
+  .fit-badge{font-family:'Jua',sans-serif;font-size:13px;padding:4px 10px;border-radius:999px;color:#fff}
+  .fit-why{font-weight:700;font-size:14px;line-height:1.35;margin:0 0 5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .act-row{display:flex;flex-wrap:wrap;gap:4px;justify-content:center}
+  .act{font-family:'Gaegu',sans-serif;font-weight:700;font-size:13px;padding:4px 8px;border-radius:999px;background:#FFF8E8;border:2px solid #FFE8A8}
   .preview-chip{display:inline-block;margin-top:8px;background:#E8F4FF;color:#2B6CB0;font-weight:700;font-size:14px;padding:6px 12px;border-radius:999px}
-  .info-box{border-radius:14px;padding:12px 13px;margin-top:10px;background:#FFFBF8;border:2px solid #f5ebe8}
-  .info-box .il{font-family:'Jua',sans-serif;font-size:14px;color:var(--ink-soft);margin-bottom:5px}
-  .info-box p{font-weight:700;font-size:15px;line-height:1.45;margin:0}
-  .major-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
-  .major{font-family:'Gaegu',sans-serif;font-weight:700;font-size:15px;padding:7px 12px;border-radius:12px;border:2px solid}
+  .info-box{border-radius:14px;padding:10px 11px;background:#FFFBF8;border:2px solid #f5ebe8}
+  .info-box .il{font-family:'Jua',sans-serif;font-size:13px;color:var(--ink-soft);margin-bottom:4px}
+  .info-box p{font-weight:700;font-size:14px;line-height:1.4;margin:0}
+  .trait-list{list-style:none;display:flex;flex-direction:column;gap:5px}
+  .trait-list li{font-weight:700;font-size:14px;line-height:1.35;padding:7px 10px;border-radius:12px;background:#FBF7FB;border:2px solid #efe6ee}
+  .trait-list li::before{content:'✦ ';color:var(--brand-dark)}
+  .major-row{display:flex;flex-wrap:wrap;gap:5px;justify-content:center}
+  .major{font-family:'Gaegu',sans-serif;font-weight:700;font-size:13px;padding:6px 10px;border-radius:10px;border:2px solid}
+  .jobs-wrap{margin-top:0}
+  .jobs.compact{justify-content:center}
+  .jobs.compact .job{font-size:14px;padding:6px 11px}
+  .desc-line{font-weight:700;font-size:14px;line-height:1.4;text-align:center;margin:0}
+  .slide-note{font-weight:700;font-size:12px;color:var(--ink-soft);text-align:center;margin:0 0 4px;line-height:1.3}
 
   .res-actions{margin-top:0}
 
@@ -315,6 +328,7 @@ function topbar(){return `<div class="topbar"><span class="pill">🎪 직업 흥
 
 function renderIntro(){
   locking=false;
+  document.body.classList.remove('res-mode');
   app.innerHTML=topbar()+`
     <div class="card intro">
       <div class="emoji">🎪</div>
@@ -328,6 +342,7 @@ function renderIntro(){
 
 function renderQuestion(){
   locking=false;
+  document.body.classList.remove('res-mode');
   const Q=QUESTIONS[qIndex];
   const pct=Math.round(((qIndex+1)/QUESTIONS.length)*100);
   const optsHtml=Q.opts.map((o,i)=>{
@@ -379,68 +394,115 @@ function buildRadar(scores,hex){
   return `<svg class="radar-svg" viewBox="0 0 300 300">${bg}<polygon points="${poly}" fill="${tint(hex,0.32)}" stroke="${hex}" stroke-width="3.2"/>${dots}${labels}</svg>`;
 }
 
-const SLIDE_LABELS=['나의 유형','전공·진로','활동·추천'];
+const SLIDE_LABELS=['나의 유형','나의 성격','이런 특징','추천 전공','강점·환경','직업 소개','궁합 ①','궁합 ②','추천 직업'];
 
 function buildResultSlides(P,T,S,radar,jobs){
   const g=CAREER_EXTRA[P];
   const kws=g.keywords.map(k=>`<span class="kw">${k}</span>`).join('');
-  const traits=g.traits.map(t=>`<span class="kw">${t}</span>`).join('');
+  const traits=g.traits.map(t=>`<li>${t}</li>`).join('');
   const majors=g.majors.map(m=>`<span class="major" style="border-color:${T.hex};background:${tint(T.hex,0.14)};color:${T.hex}">${m}</span>`).join('');
-  const cards=g.jobDetails.map((j,i)=>`
-    <div class="job-card" style="animation-delay:${0.1+i*0.08}s">
-      <div class="jh"><span class="ji">${j.e}</span><span class="jn">${j.n}</span></div>
-      <p class="jd">${j.d}</p>
+  const jobMinis=g.jobDetails.map(j=>`
+    <div class="job-mini">
+      <span class="ji">${j.e}</span>
+      <div class="jb"><span class="jn">${j.n}</span><p class="jd">${j.d}</p></div>
     </div>`).join('');
-  const fits=g.fits.map(f=>{
-    const ft=TYPES[f.code];
-    const acts=f.acts.map(a=>`<span class="act">${a}</span>`).join('');
+  const fitHtml=(f)=>{const ft=TYPES[f.code];const acts=f.acts.map(a=>`<span class="act">${a}</span>`).join('');
     return `<div class="fit-item">
       <div class="fit-top"><span class="fit-badge" style="background:${ft.hex}">${ft.name}</span></div>
       <p class="fit-why">${f.why}</p>
       <div class="act-row">${acts}</div>
-    </div>`;
-  }).join('');
+    </div>`;};
   return [
     `<div class="res-slide res-slide--main"><div class="res-slide-inner">
       <div class="card">
-        <div class="tiny">나의 직업 흥미 유형은?</div>
-        <div class="radar-center">${radar}</div>
-        <div class="type-line">
-          <span class="mini-masc">${mascot(P)}</span>
-          <span class="type-name" style="color:${T.hex}">${T.name} (${T.code})</span>
+        <div class="slide-body">
+          <div class="slide-top">
+            <div class="tiny">나의 직업 흥미 유형은?</div>
+            <div class="radar-center">${radar}</div>
+            <div class="type-line">
+              <span class="mini-masc">${mascot(P)}</span>
+              <span class="type-name" style="color:${T.hex}">${T.name} (${T.code})</span>
+            </div>
+            <div class="charname" style="color:${T.hex}">${T.charName}</div>
+          </div>
+          <div class="badge-row"><span class="bdg gold">🥇 ${T.name}</span><span class="bdg silver">🥈 ${S.name}</span></div>
+          <p class="desc-line">너의 강점은 <b style="color:${T.hex}">${T.name}</b>! ${T.desc}</p>
         </div>
-        <div class="charname" style="color:${T.hex}">${T.charName}</div>
-        <div class="badge-row" style="margin-top:10px"><span class="bdg gold">🥇 ${T.name}</span><span class="bdg silver">🥈 ${S.name}</span></div>
-        <p style="font-weight:700;font-size:16px;line-height:1.45;text-align:center;margin:9px 0 0">너의 강점은 <b style="color:${T.hex}">${T.name}</b>! ${T.desc}</p>
-        <div class="info-box">
-          <div class="il">🧠 나의 성격</div>
-          <p>${g.personality}</p>
-        </div>
-        <span class="st" style="margin-top:10px">✨ 이런 특징이 있어요</span>
-        <div class="kw-row">${traits}</div>
       </div>
     </div></div>`,
     `<div class="res-slide"><div class="res-slide-inner">
       <div class="card guide">
-        <span class="st">🎓 추천 전공 계열</span>
-        <p style="font-weight:700;font-size:14px;color:var(--ink-soft);margin:0 0 8px;line-height:1.4">중·고등 진로 탐색 때 참고해 봐요!</p>
-        <div class="major-row">${majors}</div>
-        <span class="st" style="margin-top:12px">✨ 나의 강점 키워드</span>
-        <div class="kw-row">${kws}</div>
-        <div class="env-box">
-          <div class="el">🌱 잘 맞는 환경</div>
-          <p>${g.env}</p>
+        <div class="slide-body">
+          <span class="st">🧠 나의 성격</span>
+          <div class="info-box"><p>${g.personality}</p></div>
+          <p class="desc-line" style="margin-top:4px">강점 키워드: <b style="color:${T.hex}">${T.support}</b></p>
         </div>
-        <span class="st" style="margin-top:12px">💼 직업 한눈에 보기</span>
-        <div class="job-cards">${cards}</div>
       </div>
     </div></div>`,
     `<div class="res-slide"><div class="res-slide-inner">
       <div class="card guide">
-        <span class="st">🤝 잘 맞는 유형 + 추천 활동</span>
-        <div class="fit-list">${fits}</div>
-        <span class="jt" style="margin-top:12px">💼 이런 직업 어때?</span>
-        <div class="jobs">${jobs}</div>
+        <div class="slide-body">
+          <span class="st">✨ 이런 특징이 있어요</span>
+          <p class="slide-note">학교생활에서 자주 보이는 모습이에요</p>
+          <ul class="trait-list">${traits}</ul>
+        </div>
+      </div>
+    </div></div>`,
+    `<div class="res-slide"><div class="res-slide-inner">
+      <div class="card guide">
+        <div class="slide-body">
+          <span class="st">🎓 추천 전공 계열</span>
+          <p class="slide-note">중·고등 진로 탐색 때 참고해 봐요!</p>
+          <div class="major-row">${majors}</div>
+        </div>
+      </div>
+    </div></div>`,
+    `<div class="res-slide"><div class="res-slide-inner">
+      <div class="card guide">
+        <div class="slide-body">
+          <span class="st">✨ 나의 강점 키워드</span>
+          <div class="kw-row">${kws}</div>
+          <div class="env-box">
+            <div class="el">🌱 잘 맞는 환경</div>
+            <p>${g.env}</p>
+          </div>
+        </div>
+      </div>
+    </div></div>`,
+    `<div class="res-slide"><div class="res-slide-inner">
+      <div class="card guide">
+        <div class="slide-body">
+          <span class="st">💼 직업 한눈에 보기</span>
+          <p class="slide-note">이런 일을 할 때 흥미가 잘 살아나요</p>
+          <div class="job-minis">${jobMinis}</div>
+        </div>
+      </div>
+    </div></div>`,
+    `<div class="res-slide"><div class="res-slide-inner">
+      <div class="card guide">
+        <div class="slide-body">
+          <span class="st">🤝 잘 맞는 유형 ①</span>
+          <p class="slide-note">함께하면 시너지가 나는 친구 유형이에요</p>
+          <div class="fit-list">${fitHtml(g.fits[0])}</div>
+        </div>
+      </div>
+    </div></div>`,
+    `<div class="res-slide"><div class="res-slide-inner">
+      <div class="card guide">
+        <div class="slide-body">
+          <span class="st">🤝 잘 맞는 유형 ②</span>
+          <p class="slide-note">이 유형과 함께 추천 활동을 해 봐요</p>
+          <div class="fit-list">${fitHtml(g.fits[1])}</div>
+        </div>
+      </div>
+    </div></div>`,
+    `<div class="res-slide"><div class="res-slide-inner">
+      <div class="card guide">
+        <div class="slide-body">
+          <span class="st">💼 이런 직업 어때?</span>
+          <p class="slide-note">관심 가는 직업을 골라 탐색해 봐요</p>
+          <div class="jobs-wrap"><div class="jobs compact">${jobs}</div></div>
+        </div>
       </div>
     </div></div>`
   ];
@@ -473,6 +535,7 @@ function initResultCarousel(){
 }
 
 function renderResult(previewType){
+  document.body.classList.add('res-mode');
   let scores;
   if(previewType){scores={R:0,I:0,A:0,S:0,E:0,C:0};scores[previewType]=6;}
   else scores=computeScores();
@@ -485,7 +548,7 @@ function renderResult(previewType){
   const previewNote=previewType?'<span class="preview-chip">👀 진로시간 예시 미리보기</span>':'';
   app.innerHTML=topbar()+`
     <div class="res">
-      <div class="page-chip" id="pageChip">1 / 3 · ${SLIDE_LABELS[0]}</div>
+      <div class="page-chip" id="pageChip">1 / ${SLIDE_LABELS.length} · ${SLIDE_LABELS[0]}</div>
       ${previewNote?`<div style="text-align:center;margin-bottom:6px">${previewNote}</div>`:''}
       <div class="res-carousel-wrap">
         <button type="button" class="page-turn" id="prevPage" disabled aria-label="이전 페이지"><span class="arr">◀</span>이전</button>
@@ -493,7 +556,7 @@ function renderResult(previewType){
         <button type="button" class="page-turn" id="nextPage" aria-label="다음 페이지"><span class="arr">▶</span>다음</button>
       </div>
       <div class="res-nav"><div class="res-dots">${dots}</div></div>
-      <div class="swipe-hint">◀ ▶ 옆으로 넘기기 · 내용이 길면 ↕ 아래로 스크롤</div>
+      <div class="swipe-hint">◀ ▶ 버튼이나 옆으로 넘겨서 보기</div>
       <div class="res-foot res-actions">
         <button class="btn" id="retry">🔄 다시 검사하기</button>
       </div>
