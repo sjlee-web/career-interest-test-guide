@@ -137,6 +137,11 @@
   .act-row{display:flex;flex-wrap:wrap;gap:6px}
   .act{font-family:'Gaegu',sans-serif;font-weight:700;font-size:15px;padding:6px 11px;border-radius:999px;background:#FFF8E8;border:2px solid #FFE8A8}
   .preview-chip{display:inline-block;margin-top:8px;background:#E8F4FF;color:#2B6CB0;font-weight:700;font-size:14px;padding:6px 12px;border-radius:999px}
+  .info-box{border-radius:14px;padding:12px 13px;margin-top:10px;background:#FFFBF8;border:2px solid #f5ebe8}
+  .info-box .il{font-family:'Jua',sans-serif;font-size:14px;color:var(--ink-soft);margin-bottom:5px}
+  .info-box p{font-weight:700;font-size:15px;line-height:1.45;margin:0}
+  .major-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
+  .major{font-family:'Gaegu',sans-serif;font-weight:700;font-size:15px;padding:7px 12px;border-radius:12px;border:2px solid}
 
   .res-actions{margin-top:0}
 
@@ -191,7 +196,10 @@ const TYPES = {
 const ORDER = ['R','I','A','S','E','C'];
 
 const CAREER_EXTRA = {
-  R:{keywords:['손재주','실용적','현장감','문제해결'],env:'직접 만들고, 움직이며, 눈에 보이는 결과가 나오는 환경',
+  R:{personality:'실용적이고 성실한 편이에요. 직접 해보고 결과가 눈에 보이면 뿌듯해해요.',
+    traits:['손으로 만들기·고치기 좋아함','체육·실습·기술 수업에 강함','말보다 행동으로 보여주는 타입'],
+    majors:['공학 계열','기계·전기 계열','자연과학 계열','체육·스포츠 계열','조리·식품 계열'],
+    keywords:['손재주','실용적','현장감','문제해결'],env:'직접 만들고, 움직이며, 눈에 보이는 결과가 나오는 환경',
     jobDetails:[
       {e:'🔧',n:'엔지니어',d:'기계·구조물을 설계하고 직접 만들어 세상에 실제로 적용하는 일이에요.'},
       {e:'🍳',n:'요리사',d:'재료를 손으로 다루며 맛과 모양을 완성해 사람들에게 바로 전달하는 일이에요.'},
@@ -203,7 +211,10 @@ const CAREER_EXTRA = {
       {code:'C',why:'관습형과 함께하면 작업 순서를 체계적으로 관리하기 좋아요.',
        acts:['도구·재료 체크리스트 만들기','안전 수칙 정리 포스터','실습 기록 일지 쓰기']}
     ]},
-  I:{keywords:['호기심','분석력','집중력','논리적'],env:'궁금한 걸 깊이 파고들고, 자료를 조사·실험하며 답을 찾는 환경',
+  I:{personality:'궁금한 게 많고 생각이 깊어요. 혼자 집중해서 파고들 때 힘이 나요.',
+    traits:['왜 그런지 원리를 따지는 편','실험·탐구·독서 활동 즐김','논리적으로 설명·정리 잘함'],
+    majors:['의학·보건 계열','자연과학 계열','공학 계열','컴퓨터·IT 계열','수학·통계 계열'],
+    keywords:['호기심','분석력','집중력','논리적'],env:'궁금한 걸 깊이 파고들고, 자료를 조사·실험하며 답을 찾는 환경',
     jobDetails:[
       {e:'🔬',n:'과학자',d:'가설을 세우고 실험으로 자연 현상의 원리를 밝혀내는 일이에요.'},
       {e:'📊',n:'데이터 분석가',d:'숫자와 정보를 모아 패턴을 찾고, 의미 있는 결론을 도출하는 일이에요.'},
@@ -215,7 +226,10 @@ const CAREER_EXTRA = {
       {code:'R',why:'현실형과 함께하면 아이디어를 직접 만들어 검증할 수 있어요.',
        acts:['실험 도구 직접 제작','메이커 프로젝트','현장 조사 + 시제품 만들기']}
     ]},
-  A:{keywords:['표현력','감수성','창의력','개성'],env:'자유롭게 아이디어를 내고, 나만의 방식으로 보여줄 수 있는 환경',
+  A:{personality:'감성이 풍부하고 자유로운 편이에요. 나만의 개성으로 표현하고 싶어해요.',
+    traits:['상상력·창의력이 풍부함','미술·음악·영상 활동에 몰입','틀보다 나만의 방식을 선호'],
+    majors:['예술·디자인 계열','영상·미디어 계열','문학·창작 계열','패션·뷰티 계열','건축·공간 계열'],
+    keywords:['표현력','감수성','창의력','개성'],env:'자유롭게 아이디어를 내고, 나만의 방식으로 보여줄 수 있는 환경',
     jobDetails:[
       {e:'🎨',n:'디자이너',d:'색·모양·구성으로 메시지를 시각적으로 전달하는 일이에요.'},
       {e:'📱',n:'유튜버',d:'영상·음성·스토리로 나만의 콘텐츠를 기획하고 제작하는 일이에요.'},
@@ -227,7 +241,10 @@ const CAREER_EXTRA = {
       {code:'I',why:'탐구형과 함께하면 주제를 깊이 있게 담은 작품을 만들 수 있어요.',
        acts:['탐구 결과 시각화','주제 다큐 만들기','리서치 기반 창작']}
     ]},
-  S:{keywords:['공감','소통','협력','배려'],env:'사람들과 함께하고, 도움이 필요한 이웃을 직접 돕는 환경',
+  S:{personality:'따뜻하고 친절해요. 친구 이야기를 잘 들어주고 함께하는 걸 좋아해요.',
+    traits:['모둠·봉사·멘토링에 적극적','발표·토론·소통도 편함','친구들 사이 갈등 중재 잘함'],
+    majors:['교육 계열','사회복지 계열','상담·심리 계열','간호·보건 계열','인문·사회 계열'],
+    keywords:['공감','소통','협력','배려'],env:'사람들과 함께하고, 도움이 필요한 이웃을 직접 돕는 환경',
     jobDetails:[
       {e:'👩‍🏫',n:'선생님',d:'학생의 성장을 돕고, 배움의 즐거움을 함께 나누는 일이에요.'},
       {e:'💬',n:'상담사',d:'고민을 들어주고 마음을 이해하며 해결 방향을 함께 찾는 일이에요.'},
@@ -239,7 +256,10 @@ const CAREER_EXTRA = {
       {code:'A',why:'예술형과 함께하면 감정을 표현하며 관계를 돕기 좋아요.',
        acts:['마음 나눔 포스터','친구 응원 영상','감정 일기·편지 쓰기']}
     ]},
-  E:{keywords:['리더십','추진력','설득력','도전'],env:'목표를 세우고, 사람들을 모아 함께 실행하는 환경',
+  E:{personality:'자신감 있고 도전적인 편이에요. 목표를 세우고 앞장서는 게 즐거워요.',
+    traits:['학급·동아리에서 리더 역할 잘함','설득·발표·기획에 강함','새로운 시도를 두려워하지 않음'],
+    majors:['경영·경제 계열','법학·정치 계열','마케팅·홍보 계열','국제·무역 계열','창업·벤처 분야'],
+    keywords:['리더십','추진력','설득력','도전'],env:'목표를 세우고, 사람들을 모아 함께 실행하는 환경',
     jobDetails:[
       {e:'🚀',n:'창업가',d:'새로운 아이디어로 서비스나 제품을 만들고 시장에 내놓는 일이에요.'},
       {e:'📣',n:'마케터',d:'제품·브랜드의 매력을 알리고 사람들의 관심을 끄는 일이에요.'},
@@ -251,7 +271,10 @@ const CAREER_EXTRA = {
       {code:'C',why:'관습형과 함께하면 계획을 꼼꼼히 세워 실행하기 좋아요.',
        acts:['행사 예산·일정표 짜기','역할 분담표 만들기','체크리스트로 진행 관리']}
     ]},
-  C:{keywords:['꼼꼼함','정확성','책임감','정리력'],env:'규칙과 절차가 분명하고, 자료를 체계적으로 관리하는 환경',
+  C:{personality:'꼼꼼하고 책임감이 강해요. 계획대로 정리되면 마음이 편해요.',
+    traits:['노트·자료·일정 정리 잘함','규칙·약속을 잘 지킴','숫자·데이터 다루기 편함'],
+    majors:['경영·회계 계열','행정·공공 계열','경제·금융 계열','정보·데이터 계열','통계·행정학 계열'],
+    keywords:['꼼꼼함','정확성','책임감','정리력'],env:'규칙과 절차가 분명하고, 자료를 체계적으로 관리하는 환경',
     jobDetails:[
       {e:'📒',n:'회계사',d:'수입·지출을 정확히 기록하고 재무 상태를 관리하는 일이에요.'},
       {e:'🏛️',n:'공무원',d:'정해진 절차에 따라 시민을 위해 행정 업무를 처리하는 일이에요.'},
@@ -356,11 +379,13 @@ function buildRadar(scores,hex){
   return `<svg class="radar-svg" viewBox="0 0 300 300">${bg}<polygon points="${poly}" fill="${tint(hex,0.32)}" stroke="${hex}" stroke-width="3.2"/>${dots}${labels}</svg>`;
 }
 
-const SLIDE_LABELS=['나의 유형','강점·직업','활동·추천'];
+const SLIDE_LABELS=['나의 유형','전공·진로','활동·추천'];
 
 function buildResultSlides(P,T,S,radar,jobs){
   const g=CAREER_EXTRA[P];
   const kws=g.keywords.map(k=>`<span class="kw">${k}</span>`).join('');
+  const traits=g.traits.map(t=>`<span class="kw">${t}</span>`).join('');
+  const majors=g.majors.map(m=>`<span class="major" style="border-color:${T.hex};background:${tint(T.hex,0.14)};color:${T.hex}">${m}</span>`).join('');
   const cards=g.jobDetails.map((j,i)=>`
     <div class="job-card" style="animation-delay:${0.1+i*0.08}s">
       <div class="jh"><span class="ji">${j.e}</span><span class="jn">${j.n}</span></div>
@@ -387,11 +412,20 @@ function buildResultSlides(P,T,S,radar,jobs){
         <div class="charname" style="color:${T.hex}">${T.charName}</div>
         <div class="badge-row" style="margin-top:10px"><span class="bdg gold">🥇 ${T.name}</span><span class="bdg silver">🥈 ${S.name}</span></div>
         <p style="font-weight:700;font-size:16px;line-height:1.45;text-align:center;margin:9px 0 0">너의 강점은 <b style="color:${T.hex}">${T.name}</b>! ${T.desc}</p>
+        <div class="info-box">
+          <div class="il">🧠 나의 성격</div>
+          <p>${g.personality}</p>
+        </div>
+        <span class="st" style="margin-top:10px">✨ 이런 특징이 있어요</span>
+        <div class="kw-row">${traits}</div>
       </div>
     </div></div>`,
     `<div class="res-slide"><div class="res-slide-inner">
       <div class="card guide">
-        <span class="st">✨ 나의 강점 키워드</span>
+        <span class="st">🎓 추천 전공 계열</span>
+        <p style="font-weight:700;font-size:14px;color:var(--ink-soft);margin:0 0 8px;line-height:1.4">중·고등 진로 탐색 때 참고해 봐요!</p>
+        <div class="major-row">${majors}</div>
+        <span class="st" style="margin-top:12px">✨ 나의 강점 키워드</span>
         <div class="kw-row">${kws}</div>
         <div class="env-box">
           <div class="el">🌱 잘 맞는 환경</div>
